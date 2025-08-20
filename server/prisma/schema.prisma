@@ -13,3 +13,118 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id Int @id @default(autoincrement())
+  name String
+  email String @unique
+  password String
+  role Role
+  createdAt DateTime @default(now())
+}
+
+model Market {
+  id Int @id @default(autoincrement())
+  name String
+  location String?
+  county String
+  createdAt DateTime @default(now())
+  stalls Stall[]
+}
+
+model Stall {
+  id          Int      @id @default(autoincrement())
+  marketId    Int
+  stallNumber String
+  type        StallType
+  status      StallStatus @default(available)
+  monthlyRent Float
+  market      Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  bookings    Booking[]
+  maintenanceRequests MaintenanceRequest[]   
+
+  @@unique([marketId, stallNumber])
+}
+
+model Trader {
+  id           Int      @id @default(autoincrement())
+  name         String
+  nationalId   String   @unique
+  phone        String?
+  email        String?  @unique
+  registeredAt DateTime @default(now())
+  bookings     Booking[]
+}
+
+model Booking {
+  id        Int      @id @default(autoincrement())
+  stallId   Int
+  traderId  Int
+  startDate DateTime
+  endDate   DateTime?
+  status    BookingStatus @default(pending)
+  createdAt DateTime @default(now())
+
+  stall     Stall   @relation(fields: [stallId], references: [id], onDelete: Cascade)
+  trader    Trader  @relation(fields: [traderId], references: [id], onDelete: Cascade)
+  payments  Payment[]
+
+  @@unique([stallId, traderId, startDate])
+}
+
+model Payment {
+  id        Int      @id @default(autoincrement())
+  bookingId Int
+  amount    Float
+  method    PaymentMethod
+  paidAt    DateTime @default(now())
+
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model MaintenanceRequest {
+  id          Int      @id @default(autoincrement())
+  stallId     Int
+  description String
+  status      MaintenanceStatus @default(open)
+  reportedAt  DateTime @default(now())
+
+  stall       Stall   @relation(fields: [stallId], references: [id], onDelete: Cascade)
+}
+
+/// Enums for strict values
+enum Role {
+  admin
+  officer
+}
+
+enum StallType {
+  retail
+  wholesale
+  food
+  other
+}
+
+enum StallStatus {
+  available
+  occupied
+  maintenance
+}
+
+enum BookingStatus {
+  active
+  ended
+  pending
+}
+
+enum PaymentMethod {
+  mpesa
+  cash
+  bank
+}
+
+enum MaintenanceStatus {
+  open
+  in_progress
+  closed
+}
