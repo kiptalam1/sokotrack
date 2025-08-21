@@ -15,39 +15,39 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  name String
-  email String @unique
-  password String
-  role Role
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(trader)
   createdAt DateTime @default(now())
 }
 
 model Market {
-  id Int @id @default(autoincrement())
-  name String
-  location String?
-  county String
+  id        String  @id @default(uuid())
+  name      String
+  location  String?
+  county    String
   createdAt DateTime @default(now())
-  stalls Stall[]
+  stalls    Stall[]
 }
 
 model Stall {
-  id          Int      @id @default(autoincrement())
-  marketId    Int
-  stallNumber String
-  type        StallType
-  status      StallStatus @default(available)
-  monthlyRent Float
-  market      Market   @relation(fields: [marketId], references: [id], onDelete: Cascade)
-  bookings    Booking[]
-  maintenanceRequests MaintenanceRequest[]   
+  id                     String   @id @default(uuid())
+  marketId               String
+  stallNumber            String
+  type                   StallType
+  status                 StallStatus @default(available)
+  monthlyRent            Float
+  market                 Market       @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  bookings               Booking[]
+  maintenanceRequests    MaintenanceRequest[]   
 
   @@unique([marketId, stallNumber])
 }
 
 model Trader {
-  id           Int      @id @default(autoincrement())
+  id           String   @id @default(uuid())
   name         String
   nationalId   String   @unique
   phone        String?
@@ -57,9 +57,9 @@ model Trader {
 }
 
 model Booking {
-  id        Int      @id @default(autoincrement())
-  stallId   Int
-  traderId  Int
+  id        String   @id @default(uuid())
+  stallId   String
+  traderId  String
   startDate DateTime
   endDate   DateTime?
   status    BookingStatus @default(pending)
@@ -73,8 +73,8 @@ model Booking {
 }
 
 model Payment {
-  id        Int      @id @default(autoincrement())
-  bookingId Int
+  id        String  @id @default(uuid())
+  bookingId String
   amount    Float
   method    PaymentMethod
   paidAt    DateTime @default(now())
@@ -83,8 +83,8 @@ model Payment {
 }
 
 model MaintenanceRequest {
-  id          Int      @id @default(autoincrement())
-  stallId     Int
+  id          String  @id @default(uuid())
+  stallId     String
   description String
   status      MaintenanceStatus @default(open)
   reportedAt  DateTime @default(now())
@@ -92,7 +92,7 @@ model MaintenanceRequest {
   stall       Stall   @relation(fields: [stallId], references: [id], onDelete: Cascade)
 }
 
-/// Enums for strict values
+/// Enums
 enum Role {
   admin
   officer
