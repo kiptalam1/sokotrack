@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -24,7 +17,7 @@ model User {
 }
 
 model Market {
-  id        String  @id @default(uuid())
+  id        String   @id @default(uuid())
   name      String
   location  String?
   county    String
@@ -33,63 +26,60 @@ model Market {
 }
 
 model Stall {
-  id                     String   @id @default(uuid())
-  marketId               String
-  stallNumber            String
-  type                   StallType
-  status                 StallStatus @default(available)
-  monthlyRent            Float
-  market                 Market       @relation(fields: [marketId], references: [id], onDelete: Cascade)
-  bookings               Booking[]
-  maintenanceRequests    MaintenanceRequest[]   
+  id                  String               @id @default(uuid())
+  marketId            String
+  stallNumber         String
+  type                StallType
+  status              StallStatus          @default(available)
+  monthlyRent         Float
+  bookings            Booking[]
+  maintenanceRequests MaintenanceRequest[]
+  market              Market               @relation(fields: [marketId], references: [id], onDelete: Cascade)
 
   @@unique([marketId, stallNumber])
 }
 
 model Trader {
-  id           String   @id @default(uuid())
+  id           String    @id @default(uuid())
   name         String
-  nationalId   String   @unique
+  nationalId   String    @unique
   phone        String?
-  email        String?  @unique
-  registeredAt DateTime @default(now())
+  email        String?   @unique
+  registeredAt DateTime  @default(now())
   bookings     Booking[]
 }
 
 model Booking {
-  id        String   @id @default(uuid())
+  id        String        @id @default(uuid())
   stallId   String
   traderId  String
   startDate DateTime
   endDate   DateTime?
   status    BookingStatus @default(pending)
-  createdAt DateTime @default(now())
-
-  stall     Stall   @relation(fields: [stallId], references: [id], onDelete: Cascade)
-  trader    Trader  @relation(fields: [traderId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
+  stall     Stall         @relation(fields: [stallId], references: [id], onDelete: Cascade)
+  trader    Trader        @relation(fields: [traderId], references: [id], onDelete: Cascade)
   payments  Payment[]
 
   @@unique([stallId, traderId, startDate])
 }
 
 model Payment {
-  id        String  @id @default(uuid())
+  id        String        @id @default(uuid())
   bookingId String
   amount    Float
   method    PaymentMethod
-  paidAt    DateTime @default(now())
-
-  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  paidAt    DateTime      @default(now())
+  booking   Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
 
 model MaintenanceRequest {
-  id          String  @id @default(uuid())
+  id          String            @id @default(uuid())
   stallId     String
   description String
   status      MaintenanceStatus @default(open)
-  reportedAt  DateTime @default(now())
-
-  stall       Stall   @relation(fields: [stallId], references: [id], onDelete: Cascade)
+  reportedAt  DateTime          @default(now())
+  stall       Stall             @relation(fields: [stallId], references: [id], onDelete: Cascade)
 }
 
 /// Enums
