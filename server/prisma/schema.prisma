@@ -96,6 +96,7 @@ model MaintenanceRequest {
 enum Role {
   admin
   officer
+  trader
 }
 
 enum StallType {
@@ -108,6 +109,7 @@ enum StallType {
 enum StallStatus {
   available
   occupied
+  reserved
   maintenance
 }
 
