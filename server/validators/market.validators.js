@@ -42,3 +42,35 @@ export const marketValidators = checkSchema({
 		},
 	},
 });
+
+
+export const stallValidators = checkSchema({
+	stallNumber: {
+		notEmpty: {
+			errorMessage: "Stall number is required",
+		},
+		isString: {
+			errorMessage: "Stall number must be a string",
+		},
+		trim: true,
+	},
+	type: {
+		notEmpty: {
+			errorMessage: "Stall type is required",
+		},
+		isIn: {
+			options: [["retail", "wholesale", "food", "other"]],
+			errorMessage: "Stall type must be one of: retail, wholesale, food, other",
+		},
+	},
+	monthlyRent: {
+		notEmpty: {
+			errorMessage: "Monthly rent is required",
+		},
+		isFloat: {
+			options: { min: 0 },
+			errorMessage: "Monthly rent must be a positive number",
+		},
+		toFloat: true, // convert string → float automatically
+	},
+});
