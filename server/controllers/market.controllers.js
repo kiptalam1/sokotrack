@@ -28,7 +28,7 @@ export const createMarket = async (req, res) => {
 		const newMarket = await prisma.market.create({
 			data: {
 				name,
-				location: location || "",
+				location,
 				county,
 			},
 		});
@@ -37,6 +37,17 @@ export const createMarket = async (req, res) => {
 			message: "Market created successfully",
 			market: newMarket,
 		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+export const getAllMarkets = async (req, res) => {
+	try {
+		const markets = await prisma.market.findMany();
+
+		return res.status(200).json({ markets });
 	} catch (error) {
 		console.error(error);
 		return res.status(500).json({ error: "Internal server error" });
