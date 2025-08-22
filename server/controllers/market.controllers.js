@@ -110,6 +110,10 @@ export const createStall = async (req, res) => {
 
 export const getAllStallsInAMarket = async (req, res) => {
 	const marketId = req.params.marketId;
+	const page = parseInt(req.query.page, 10) || 1; // default: page 1
+	const limit = parseInt(req.query.limit, 10) || 10; // default: 10 stalls per page
+	const skip = (page - 1) * limit;
+
 	try {
 		// check if market exists;
 		const market = await prisma.market.findUnique({
@@ -120,16 +124,27 @@ export const getAllStallsInAMarket = async (req, res) => {
 		if (!market)
 			return res.status(404).json({ error: "This market does not exists" });
 
-		// then fetch the market stalls;
+		// then fetch the market stalls with pagination;
 		const stalls = await prisma.stall.findMany({
 			where: {
 				marketId,
 			},
+			skip,
+			take: limit,
 		});
+
+		// Count total stalls for pagination info
+		const totalStalls = await prisma.stall.count({ where: { marketId } });
 
 		// return response;
 		return res.status(200).json({
 			market,
+			pagination: {
+				totalStalls,
+				limit,
+				page,
+				totalPages: Math.ceil(totalStalls / limit),
+			},
 			stalls,
 		});
 	} catch (error) {
