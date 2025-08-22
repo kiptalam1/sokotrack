@@ -8,7 +8,7 @@ import {
 	registerUserValidator,
 	loginUserValidator,
 } from "../validators/auth.validators.js";
-import { handleValidationErrors } from "../middlewares/auth.middlewares.js";
+import { handleValidationErrors } from "../middlewares/validationErrors.middlewares.js";
 
 const router = express.Router();
 

@@ -23,6 +23,8 @@ model Market {
   county    String
   createdAt DateTime @default(now())
   stalls    Stall[]
+
+  @@unique([name, county])
 }
 
 model Stall {
