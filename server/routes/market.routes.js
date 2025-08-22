@@ -9,6 +9,7 @@ import {
 	createMarket,
 	getAllMarkets,
 	createStall,
+	getAllStallsInAMarket,
 } from "../controllers/market.controllers.js";
 
 const router = express.Router();
@@ -29,5 +30,7 @@ router.post(
 	handleValidationErrors,
 	createStall
 );
+router.get("/:marketId/stalls", verifyAccessToken, getAllStallsInAMarket);
+
 
 export default router;

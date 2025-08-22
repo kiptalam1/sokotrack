@@ -34,7 +34,7 @@ export const createMarket = async (req, res) => {
 		});
 		// return response;
 		return res.status(201).json({
-			message: "Market created successfully",
+			message: `${newMarket.name} market created successfully`,
 			market: newMarket,
 		});
 	} catch (error) {
@@ -101,6 +101,36 @@ export const createStall = async (req, res) => {
 			message: `Stall ${newStall.stallNumber} created successfully`,
 			stall: newStall,
 			market,
+		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+export const getAllStallsInAMarket = async (req, res) => {
+	const marketId = req.params.marketId;
+	try {
+		// check if market exists;
+		const market = await prisma.market.findUnique({
+			where: {
+				id: marketId,
+			},
+		});
+		if (!market)
+			return res.status(404).json({ error: "This market does not exists" });
+
+		// then fetch the market stalls;
+		const stalls = await prisma.stall.findMany({
+			where: {
+				marketId,
+			},
+		});
+
+		// return response;
+		return res.status(200).json({
+			market,
+			stalls,
 		});
 	} catch (error) {
 		console.error(error);
