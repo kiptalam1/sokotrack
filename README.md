@@ -17,7 +17,7 @@ body: { name, location, county }
 body: { stallNumber, type, monthlyRent }
 ✅GET /markets/:marketId/stalls → List stalls in a market (with status)
 ✅GET /stalls/:id → Get stall details (bookings, maintenance, etc.)
-⏳PUT /stalls/:id → Update stall (rent, type, status)
+✅PUT /stalls/:id → Update stall (rent, type, status)
 ⏳DELETE /stalls/:id → Delete stall
 
 
@@ -28,11 +28,11 @@ body: { stallNumber, type, monthlyRent }
 ✅Add stalls → POST /markets/:marketId/stalls
 ✅View stalls by market → GET /markets/:marketId/stalls
 ✅View all stalls → GET /markets/:marketId/stalls => (OPTIONAL)
-⌛Update stall status → PUT /stalls/:id
+✅Update stall status → PUT /stalls/:id
 
 
 
-✅ Once this is done, you’ll have the backbone for:
+🚦 Once this is done, you’ll have the backbone for:
 
 ⌛Assigning traders (bookings)
 ⌛Tracking availability

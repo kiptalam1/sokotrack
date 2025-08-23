@@ -235,3 +235,29 @@ export const updateMarket = async (req, res) => {
 		});
 	}
 };
+
+export const deleteAMarket = async (req, res) => {
+	const { marketId } = req.params;
+	try {
+		//⏳ TODO -> only allow admin to delete a market;
+		//
+		//
+		//
+		// check if market has been deleted;
+		const market = await prisma.market.findUnique({ where: { id: marketId } });
+		if (!market)
+			return res.status(404).json({ error: "This market no longer exists" });
+		// delete if exists;
+		const deletedMarket = await prisma.market.delete({
+			where: { id: marketId },
+		});
+
+		return res.status(200).json({
+			message: `${deletedMarket.name} was deleted successfully`,
+			market: deletedMarket,
+		});
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ error: "Internal server error" });
+	}
+};

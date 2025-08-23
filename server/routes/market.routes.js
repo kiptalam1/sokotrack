@@ -13,6 +13,7 @@ import {
 	getAllStallsInAMarket,
 	getASingleMarketAndItsStalls,
 	updateMarket,
+	deleteAMarket,
 } from "../controllers/market.controllers.js";
 
 const router = express.Router();
@@ -42,5 +43,8 @@ router.patch(
 	handleValidationErrors,
 	updateMarket
 );
+router.delete("/:marketId", verifyAccessToken, deleteAMarket);
+
+
 
 export default router;
