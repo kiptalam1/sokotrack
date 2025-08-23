@@ -118,3 +118,49 @@ export const stallValidators = checkSchema({
 		toFloat: true, // convert string → float automatically
 	},
 });
+
+
+export const updateStallValidators = checkSchema({
+	stallNumber: {
+		optional: true,
+		notEmpty: {
+			errorMessage: "Stall number cannot be empty if provided",
+		},
+		isString: {
+			errorMessage: "Stall number must be a string",
+		},
+		trim: true,
+	},
+	type: {
+		optional: true,
+		notEmpty: {
+			errorMessage: "Stall type cannot be empty if provided",
+		},
+		isIn: {
+			options: [["retail", "wholesale", "food", "other"]],
+			errorMessage: "Stall type must be one of: retail, wholesale, food, other",
+		},
+	},
+	monthlyRent: {
+		optional: true,
+		notEmpty: {
+			errorMessage: "Monthly rent cannot be empty if provided",
+		},
+		isFloat: {
+			options: { min: 0 },
+			errorMessage: "Monthly rent must be a positive number",
+		},
+		toFloat: true,
+	},
+	status: {
+		optional: true,
+		notEmpty: {
+			errorMessage: "Status cannot be empty if provided",
+		},
+		isIn: {
+			options: [["available", "occupied", "reserved", "maintenance"]],
+			errorMessage:
+				"Status must be one of: available, occupied, reserved, maintenance",
+		},
+	},
+});
