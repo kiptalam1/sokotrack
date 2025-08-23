@@ -10,6 +10,7 @@ import {
 	getAllMarkets,
 	createStall,
 	getAllStallsInAMarket,
+	getASingleMarketAndItsStalls,
 } from "../controllers/market.controllers.js";
 
 const router = express.Router();
@@ -31,6 +32,7 @@ router.post(
 	createStall
 );
 router.get("/:marketId/stalls", verifyAccessToken, getAllStallsInAMarket);
+router.get("/:marketId", verifyAccessToken, getASingleMarketAndItsStalls);
 
 
 export default router;

@@ -152,3 +152,51 @@ export const getAllStallsInAMarket = async (req, res) => {
 		return res.status(500).json({ error: "Internal server error" });
 	}
 };
+
+export const getASingleMarketAndItsStalls = async (req, res) => {
+	const marketId = req.params.marketId;
+	const limit = parseInt(req.query.limit, 10) || 10;
+	const page = parseInt(req.query.page, 10) || 1;
+	const skip = (page - 1) * limit;
+
+	try {
+		// check if market exists;
+		const market = await prisma.market.findUnique({
+			where: {
+				id: marketId,
+			},
+		});
+		if (!market)
+			return res.status(404).json({
+				error: "This market was not found",
+			});
+
+		// then fetch its stalls;
+		const stalls = await prisma.stall.findMany({
+			where: {
+				marketId,
+			},
+			skip,
+			take: limit,
+		});
+
+		// count total stalls in market;
+		const totalStalls = await prisma.stall.count({
+			where: { marketId },
+		});
+		// return response:
+		return res.status(200).json({
+			pagination: {
+				totalStalls,
+				page,
+				limit,
+				totalPages: Math.ceil(totalStalls / limit),
+			},
+			market,
+			stalls,
+		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({ error: "Internal server error" });
+	}
+};
