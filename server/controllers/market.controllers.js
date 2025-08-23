@@ -200,3 +200,38 @@ export const getASingleMarketAndItsStalls = async (req, res) => {
 		return res.status(500).json({ error: "Internal server error" });
 	}
 };
+
+export const updateMarket = async (req, res) => {
+	const marketId = req.params.marketId;
+	const { name, location, county } = req.body;
+	try {
+		// TODO -> only admin should update market;
+		//
+		//
+		//
+		//
+		// check if market exist;
+		const market = await prisma.market.findUnique({
+			where: {
+				id: marketId,
+			},
+		});
+		if (!market)
+			return res.status(404).json({ error: "This market does no exist" });
+
+		const updatedMarket = await prisma.market.update({
+			where: { id: marketId },
+			data: { name, county, location },
+		});
+
+		return res.status(200).json({
+			message: `${updatedMarket.name} was updated successfully`,
+			market: updatedMarket,
+		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({
+			error: "Internal server error",
+		});
+	}
+};

@@ -3,6 +3,7 @@ import { verifyAccessToken } from "../middlewares/token.middlewares.js";
 import {
 	marketValidators,
 	stallValidators,
+	updateMarketValidators,
 } from "../validators/market.validators.js";
 import { handleValidationErrors } from "../middlewares/validationErrors.middlewares.js";
 import {
@@ -11,6 +12,7 @@ import {
 	createStall,
 	getAllStallsInAMarket,
 	getASingleMarketAndItsStalls,
+	updateMarket,
 } from "../controllers/market.controllers.js";
 
 const router = express.Router();
@@ -33,6 +35,12 @@ router.post(
 );
 router.get("/:marketId/stalls", verifyAccessToken, getAllStallsInAMarket);
 router.get("/:marketId", verifyAccessToken, getASingleMarketAndItsStalls);
-
+router.patch(
+	"/:marketId",
+	verifyAccessToken,
+	updateMarketValidators,
+	handleValidationErrors,
+	updateMarket
+);
 
 export default router;

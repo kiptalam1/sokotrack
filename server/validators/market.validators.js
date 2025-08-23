@@ -1,5 +1,50 @@
 import { checkSchema } from "express-validator";
 
+export const updateMarketValidators = checkSchema({
+	name: {
+		optional: true,
+		notEmpty: {
+			errorMessage: "Market name cannot be empty if provided",
+		},
+		isLength: {
+			options: { min: 3, max: 60 },
+			errorMessage: "Market name should be between 3 to 60 characters long",
+		},
+		isString: {
+			errorMessage: "Market name must include a string of letters",
+		},
+		trim: true,
+	},
+	location: {
+		optional: true,
+		notEmpty: {
+			errorMessage: "Location cannot be empty if provided",
+		},
+		isLength: {
+			options: { min: 3, max: 60 },
+			errorMessage: "Location should be between 3 to 60 characters long",
+		},
+		isString: {
+			errorMessage: "Location must include a string of letters",
+		},
+		trim: true,
+	},
+	county: {
+		optional: true,
+		notEmpty: {
+			errorMessage: "County name cannot be empty if provided",
+		},
+		isLength: {
+			options: { min: 3, max: 60 },
+			errorMessage: "County name should be between 3 to 60 characters long",
+		},
+		isString: {
+			errorMessage: "County name must include a string of letters",
+		},
+		trim: true,
+	},
+});
+
 export const marketValidators = checkSchema({
 	name: {
 		notEmpty: {
@@ -42,7 +87,6 @@ export const marketValidators = checkSchema({
 		},
 	},
 });
-
 
 export const stallValidators = checkSchema({
 	stallNumber: {

@@ -16,7 +16,7 @@ DELETE /markets/:id → Delete market
 ✅POST /markets/:marketId/stalls → Add stall(s) to a market
 body: { stallNumber, type, monthlyRent }
 ✅GET /markets/:marketId/stalls → List stalls in a market (with status)
-GET /stalls/:id → Get stall details (bookings, maintenance, etc.)
+✅GET /stalls/:id → Get stall details (bookings, maintenance, etc.)
 PUT /stalls/:id → Update stall (rent, type, status)
 DELETE /stalls/:id → Delete stall
 
