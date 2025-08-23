@@ -10,7 +10,7 @@ body: { name, location, county }
 ✅GET /markets → List all markets
 ✅GET /markets/:id → Get single market + stalls
 ✅PUT /markets/:id → Update market info
-⏳DELETE /markets/:id → Delete market
+✅DELETE /markets/:id → Delete market
 
 ### Stalls
 ✅POST /markets/:marketId/stalls → Add stall(s) to a market

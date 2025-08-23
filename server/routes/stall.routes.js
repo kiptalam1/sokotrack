@@ -4,6 +4,7 @@ import { handleValidationErrors } from "../middlewares/validationErrors.middlewa
 import {
 	getASingleStallDetails,
 	updateStall,
+	deleteAStall,
 } from "../controllers/stall.controllers.js";
 import { updateStallValidators } from "../validators/market.validators.js";
 
@@ -17,5 +18,7 @@ router.patch(
 	handleValidationErrors,
 	updateStall
 );
+router.delete("/:id", verifyAccessToken, deleteAStall);
+
 
 export default router;
