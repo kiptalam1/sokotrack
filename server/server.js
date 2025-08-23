@@ -7,6 +7,8 @@ dotenv.config();
 // import { globalErrorHandler } from "./middlewares/errors.middlewares.js";
 import authRoutes from "./routes/auth.routes.js";
 import marketRoutes from "./routes/market.routes.js";
+import stallRoutes from "./routes/stall.routes.js";
+
 const app = express();
 
 //middleware;
@@ -29,6 +31,8 @@ app.use((req, res, next) => {
 // Mount auth routes
 app.use("/api/auth", authRoutes);
 app.use("/api/markets", marketRoutes);
+app.use("/api/stalls", stallRoutes);
+
 
 // 404 handler
 app.use((req, res) => {

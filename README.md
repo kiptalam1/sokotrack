@@ -8,7 +8,7 @@ County Market-Stall Booking &amp; Allocation System
 ✅POST /markets → Create a new market
 body: { name, location, county }
 ✅GET /markets → List all markets
-GET /markets/:id → Get single market + stalls
+✅GET /markets/:id → Get single market + stalls
 PUT /markets/:id → Update market info
 DELETE /markets/:id → Delete market
 
