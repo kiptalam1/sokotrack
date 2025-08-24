@@ -59,7 +59,7 @@ const Navbar = () => {
 				<li>
 					<button
 						onClick={toggleTheme}
-						className="text-[var(--color-brand-accent)] mt-0.5">
+						className="text-[var(--color-brand-accent)] mt-0.5 mr-4">
 						{dark ? <SunIcon size={20} /> : <MoonIcon size={20} />}
 					</button>
 				</li>
