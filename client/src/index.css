@@ -1,42 +1,43 @@
 @import "tailwindcss";
 
-/* Light theme */
-@theme {
-  --font-sans: Inter, ui-sans-serif, system-ui;
-  --font-heading: Poppins, ui-sans-serif;
-  --font-mono: "Roboto Mono", monospace;
-
-  --color-brand-primary: #1E3A8A;   /* deep blue */
-  --color-brand-secondary: #10B981; /* emerald */
-  --color-brand-accent: #F59E0B;    /* amber */
-
-  /* standard gray scale (lightest → darkest) */
-  --color-gray-50:  #F9FAFB;
-  --color-gray-100: #F3F4F6;
-  --color-gray-200: #E5E7EB;
-  --color-gray-300: #D1D5DB;
-  --color-gray-400: #9CA3AF;
-  --color-gray-500: #6B7280;
-  --color-gray-600: #4B5563;
-  --color-gray-700: #374151;
-  --color-gray-800: #1F2937;
-  --color-gray-900: #111827;
+*{
+  font-family: var(--font-sans);
 }
 
-/* Dark theme (keep 50 lightest, 900 darkest) */
-@theme dark {
-  --color-brand-primary: #0F172A;   /* near-black navy */
-  --color-brand-secondary: #34D399; /* bright green */
-  --color-brand-accent: #FACC15;    /* yellow */
+@theme {
+  /* Brand colors */
+  --color-brand-primary: #1a237e;    /* Deep Blue */
+  --color-brand-secondary: #3949ab;  /* Indigo */
+  --color-brand-accent: #ffb300;     /* Amber */
 
-  --color-gray-50:  #F9FAFB;  /* stays light for text */
-  --color-gray-100: #E5E7EB;
-  --color-gray-200: #D1D5DB;
-  --color-gray-300: #9CA3AF;
-  --color-gray-400: #6B7280;
-  --color-gray-500: #4B5563;
-  --color-gray-600: #374151;
-  --color-gray-700: #1F2937;
-  --color-gray-800: #111827;
-  --color-gray-900: #0B1220; /* slightly darker than 111827 */
+  /* Neutral grays */
+  --color-gray-50: #f9fafb;
+  --color-gray-900: #111827;
+
+  /* Fonts */
+  --font-heading: "Poppins", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "Roboto mono", sans-serif;
+}
+
+
+@theme dark {
+  --color-brand-primary: #0d1117;   /* Dark background */
+  --color-brand-secondary: #161b22; /* Slightly lighter dark */
+  --color-brand-accent: #ff9800;    /* Amber (darker tone) */
+
+  --color-gray-50: #f9fafb;  /* Light text */
+  --color-gray-900: #0a0a0a; /* Darker gray background */
+}
+
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+button{
+  cursor: pointer;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
 }
