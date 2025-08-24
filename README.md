@@ -18,7 +18,7 @@ body: { stallNumber, type, monthlyRent }
 ✅GET /markets/:marketId/stalls → List stalls in a market (with status)
 ✅GET /stalls/:id → Get stall details (bookings, maintenance, etc.)
 ✅PUT /stalls/:id → Update stall (rent, type, status)
-⏳DELETE /stalls/:id → Delete stall
+✅DELETE /stalls/:id → Delete stall
 
 
 
@@ -32,7 +32,7 @@ body: { stallNumber, type, monthlyRent }
 
 
 
-🚦 Once this is done, you’ll have the backbone for:
+### 🚦Once this is done, you’ll have the backbone for:
 
 ⌛Assigning traders (bookings)
 ⌛Tracking availability
