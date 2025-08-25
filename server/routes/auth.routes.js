@@ -3,7 +3,9 @@ import {
 	registerUser,
 	loginUser,
 	logoutUser,
+	getMe,
 } from "../controllers/auth.controllers.js";
+import { verifyAccessToken } from "../middlewares/token.middlewares.js";
 import {
 	registerUserValidator,
 	loginUserValidator,
@@ -24,6 +26,8 @@ router.post(
 router.post("/login", loginUserValidator, handleValidationErrors, loginUser);
 router.get("/refresh", refreshAccessToken);
 router.post("/logout", logoutUser);
+router.get("/me", verifyAccessToken, getMe);
+
 
 
 export default router;

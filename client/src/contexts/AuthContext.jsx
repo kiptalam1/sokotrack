@@ -72,16 +72,34 @@ export const AuthProvider = ({ children }) => {
 		}
 	};
 
-	// refresh on app load;
+	// fetch user with valid token
+	const fetchUser = async (token) => {
+		try {
+			const res = await fetch("/api/auth/me", {
+				method: "GET",
+				headers: { Authorization: `Bearer ${token}` },
+				credentials: "include",
+			});
+			const data = await res.json();
+			if (!res.ok) throw new Error(data.error || "Failed to load user");
+
+			setUser(data.user);
+		} catch (error) {
+			console.error("Failed to fetch user:", error.message);
+			setUser(null);
+		}
+	};
+
+	// restore session on app load
 	useEffect(() => {
-		(async () => {
+		const init = async () => {
 			const token = await refreshAccessToken();
-			if (!token) {
-				setUser(null);
-				setAccessToken(null);
+			if (token) {
+				await fetchUser(token);
 			}
 			setLoading(false);
-		})();
+		};
+		init();
 	}, []);
 
 	// auto-refresh token every 14 minutes;
