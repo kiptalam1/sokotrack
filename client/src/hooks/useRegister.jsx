@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-import React from "react";
 
 const useRegister = () => {
 	const [formData, setFormData] = useState({
@@ -44,7 +43,7 @@ const useRegister = () => {
 				if (!res.ok) throw new Error("Failed to register user");
 
 				const data = await res.json();
-				console.log("registration data :", data);
+				// console.log("registration data :", data);
 
 				setFormData({
 					name: "",

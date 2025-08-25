@@ -60,6 +60,7 @@ const RegisterForm = () => {
 
 				<button
 					type="submit"
+					disabled={loading}
 					className="mt-4 p-2 bg-[var(--color-brand-primary)] hover:bg-[var(--color-brand-secondary)] text-[var(--color-text-contrast)] rounded-md transition-all text-base font-medium">
 					{loading ? "Registering..." : "Register"}
 				</button>
