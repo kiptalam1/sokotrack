@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
 	BarChart3,
 	Smartphone,
@@ -10,10 +11,11 @@ import {
 } from "lucide-react";
 
 function LandingPage() {
+	const navigate = useNavigate();
 	return (
-		<div className="min-h-screen bg-[var(--color-gray-50)] text-[var(--color-gray-900)] font-sans dark:bg-[var(--color-gray-900)] dark:text-[var(--color-gray-50)]">
+		<div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] font-sans">
 			{/* HERO */}
-			<section className="text-center py-20 px-6 bg-[var(--color-gray-100)] dark:bg-[var(--color-gray-800)]">
+			<section className="text-center py-20 px-6 bg-[var(--color-card)] shadow-sm">
 				<h2 className="font-heading text-4xl sm:text-5xl font-bold mb-4 text-[var(--color-brand-primary)] dark:text-[var(--color-brand-accent)]">
 					Digitizing County Markets in Kenya
 				</h2>
@@ -22,10 +24,12 @@ function LandingPage() {
 					vendors with transparency.
 				</p>
 				<div className="flex justify-center gap-4">
-					<button className="bg-[var(--color-brand-secondary)] text-[var(--color-gray-50)] px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition">
+					<button
+						onClick={() => navigate("/auth/register")}
+						className="bg-[var(--color-brand-secondary)] text-[var(--color-text-contrast)] px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition">
 						Register
 					</button>
-					<button className="border border-[var(--color-brand-accent)] text-[var(--color-brand-accent)] px-6 py-3 rounded-lg font-semibold hover:bg-[var(--color-brand-accent)] hover:text-[var(--color-gray-900)] transition">
+					<button className="border border-[var(--color-brand-accent)] text-[var(--color-brand-accent)] px-6 py-3 rounded-lg font-semibold hover:bg-[var(--color-brand-accent)] hover:text-[var(--color-text-contrast)] transition">
 						Login
 					</button>
 				</div>
@@ -39,7 +43,7 @@ function LandingPage() {
 				<ul className="max-w-2xl mx-auto space-y-3 text-lg">
 					<li>Manual stall allocation</li>
 					<li>Revenue leakages</li>
-					<li> lost county income</li>
+					<li>Lost county income</li>
 					<li>Vendors lack fair access to stalls</li>
 					<li>No real-time visibility for officials</li>
 				</ul>
@@ -48,13 +52,13 @@ function LandingPage() {
 			{/* SOLUTION */}
 			<section
 				id="features"
-				className="py-16 px-6 bg-[var(--color-gray-100)] dark:bg-[var(--color-gray-800)]">
+				className="py-16 px-6 bg-[var(--color-card)] shadow-sm">
 				<h3 className="font-heading text-3xl font-bold mb-10 text-center">
 					Why Counties Choose SokoTrack
 				</h3>
 				<div className="grid sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
 					{/* Governments */}
-					<div className="bg-[var(--color-gray-50)] dark:bg-[var(--color-gray-900)] rounded-2xl shadow-md p-6">
+					<div className="bg-[var(--color-bg)] rounded-2xl shadow-md p-6 border border-[var(--color-border)]">
 						<h4 className="font-semibold text-xl mb-4 flex items-center gap-2">
 							<Building className="text-[var(--color-brand-accent)]" />
 							For County Governments
@@ -76,7 +80,7 @@ function LandingPage() {
 					</div>
 
 					{/* Vendors */}
-					<div className="bg-[var(--color-gray-50)] dark:bg-[var(--color-gray-900)] rounded-2xl shadow-md p-6">
+					<div className="bg-[var(--color-bg)] rounded-2xl shadow-md p-6 border border-[var(--color-border)]">
 						<h4 className="font-semibold text-xl mb-4 flex items-center gap-2">
 							<Users className="text-[var(--color-brand-accent)]" />
 							For Vendors
@@ -117,17 +121,17 @@ function LandingPage() {
 			{/* CTA */}
 			<section
 				id="contact"
-				className="text-center py-20 px-6 bg-[var(--color-brand-primary)] text-[var(--color-gray-50)]">
+				className="text-center py-20 px-6 bg-[var(--color-brand-primary)] text-[var(--color-text-contrast)]">
 				<h3 className="font-heading text-3xl font-bold mb-4">
 					Ready to digitize your county markets?
 				</h3>
-				<button className="bg-[var(--color-brand-accent)] text-[var(--color-gray-900)] px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition mt-4">
+				<button className="bg-[var(--color-brand-accent)] text-[var(--color-text-contrast)] px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition mt-4">
 					Register Now
 				</button>
 			</section>
 
 			{/* FOOTER */}
-			<footer className="bg-[var(--color-gray-900)] text-[var(--color-gray-50)] py-8 text-center">
+			<footer className="bg-[var(--color-card)] border-t border-[var(--color-border)] text-[var(--color-text)] py-8 text-center">
 				<p>© {new Date().getFullYear()} SokoTrack. All rights reserved.</p>
 				<p className="mt-2">Nairobi, Kenya</p>
 			</footer>

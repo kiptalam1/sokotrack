@@ -1,13 +1,17 @@
 import {} from "react";
 import Navbar from "./components/common/Navbar";
 import LandingPage from "./pages/LandingPage";
+import { Route, Routes } from "react-router-dom";
+import Register from "./pages/Register";
 
 function App() {
 	return (
 		<>
-			{/* <h1 className="font-heading">Hello world</h1> */}
 			<Navbar />
-			<LandingPage />
+			<Routes>
+				<Route path="/" element={<LandingPage />} />
+				<Route path="/auth/register" element={<Register />} />
+			</Routes>
 		</>
 	);
 }

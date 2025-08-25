@@ -28,33 +28,44 @@ const Navbar = () => {
 	};
 
 	return (
-		<nav className="relative flex items-center justify-between p-4 sm:py-6 shadow-md bg-[var(--color-brand-primary)]">
+		<nav className="relative flex items-center justify-between p-4 sm:py-6 shadow-md bg-[var(--color-bg)] border-b border-[var(--color-border)]">
+			{/* Logo */}
 			<div className="flex items-center gap-2">
 				<img src="/sokotrack-icon.svg" alt="Logo" className="w-7 h-7" />
-				<h1 className="font-heading text-2xl font-semibold text-[var(--color-gray-50)]">
+				<h1 className="font-heading text-2xl font-semibold text-[var(--color-brand-primary)] dark:text-[var(--color-brand-accent)]">
 					SokoTrack
 				</h1>
 			</div>
 
+			{/* Mobile menu button */}
 			<button
-				className="sm:hidden p-2 rounded-md text-[var(--color-gray-50)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-accent)]"
+				className="sm:hidden p-2 rounded-md text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-accent)]"
 				aria-expanded={isOpen}
 				onClick={() => setIsOpen(!isOpen)}>
 				{isOpen ? <X size={28} /> : <Menu size={28} />}
 			</button>
 
-			<ul className="hidden sm:flex items-center gap-6 font-sans text-[var(--color-gray-50)] mr-2">
+			{/* Desktop menu */}
+			<ul className="hidden sm:flex items-center gap-6 font-sans text-[var(--color-text)] mr-2">
 				<li>
-					<a href="#">Home</a>
+					<a href="#" className="hover:text-[var(--color-brand-accent)]">
+						Home
+					</a>
 				</li>
 				<li>
-					<a href="#">About</a>
+					<a href="#" className="hover:text-[var(--color-brand-accent)]">
+						About
+					</a>
 				</li>
 				<li>
-					<a href="#">Features</a>
+					<a href="#" className="hover:text-[var(--color-brand-accent)]">
+						Features
+					</a>
 				</li>
 				<li>
-					<a href="#">Contact</a>
+					<a href="#" className="hover:text-[var(--color-brand-accent)]">
+						Contact
+					</a>
 				</li>
 				<li>
 					<button
@@ -65,22 +76,31 @@ const Navbar = () => {
 				</li>
 			</ul>
 
+			{/* Mobile dropdown */}
 			<div
-				className={`absolute top-full left-0 w-full bg-[var(--color-brand-primary)] z-50 sm:hidden ${
+				className={`absolute top-full left-0 w-full bg-[var(--color-bg)] border-t border-[var(--color-border)] z-50 sm:hidden ${
 					isOpen ? "block" : "hidden"
 				}`}>
-				<ul className="flex flex-col space-y-4 px-6 py-2 font-sans text-[var(--color-gray-50)]">
+				<ul className="flex flex-col space-y-4 px-6 py-2 font-sans text-[var(--color-text)]">
 					<li>
-						<a href="#">Home</a>
+						<a href="#" className="hover:text-[var(--color-brand-accent)]">
+							Home
+						</a>
 					</li>
 					<li>
-						<a href="#">About</a>
+						<a href="#" className="hover:text-[var(--color-brand-accent)]">
+							About
+						</a>
 					</li>
 					<li>
-						<a href="#">Features</a>
+						<a href="#" className="hover:text-[var(--color-brand-accent)]">
+							Features
+						</a>
 					</li>
 					<li>
-						<a href="#">Contact</a>
+						<a href="#" className="hover:text-[var(--color-brand-accent)]">
+							Contact
+						</a>
 					</li>
 					<li>
 						<button

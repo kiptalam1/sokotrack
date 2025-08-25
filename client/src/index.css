@@ -1,43 +1,71 @@
 @import "tailwindcss";
 
-*{
+/* Reset font */
+* {
   font-family: var(--font-sans);
 }
 
-@theme {
-  /* Brand colors */
+/* ===================== */
+/* Global Theme Tokens   */
+/* ===================== */
+
+/* Light mode (default) */
+:root {
+  /* Backgrounds */
+  --color-bg: #f5f7fa;        /* Neutral background */
+  --color-card: #ffffff;      /* Card / form surfaces */
+  --color-border: #e0e0e0;    /* Light gray border */
+
+  /* Text */
+  --color-text: #111827;      /* Dark gray text */
+
+  /* Brand (used only for CTAs/highlights, not big backgrounds) */
   --color-brand-primary: #1a237e;    /* Deep Blue */
   --color-brand-secondary: #3949ab;  /* Indigo */
   --color-brand-accent: #ffb300;     /* Amber */
+ --color-text-contrast: #ffffff; /* for buttons/brand backgrounds */
 
-  /* Neutral grays */
-  --color-gray-50: #f9fafb;
-  --color-gray-900: #111827;
 
   /* Fonts */
   --font-heading: "Poppins", sans-serif;
   --font-sans: "Inter", sans-serif;
-  --font-mono: "Roboto mono", sans-serif;
+  --font-mono: "Roboto Mono", monospace;
+
+
 }
 
+/* Dark mode */
+.dark {
+  /* Backgrounds */
+  --color-bg: #1c1c21;        /* Neutral dark gray, not pure black */
+  --color-card: #2a2d33;      /* Slightly lighter for surfaces */
+  --color-border: #3c3f44;    /* Subtle border gray */
 
-@theme dark {
-  --color-brand-primary: #0d1117;   /* Dark background */
-  --color-brand-secondary: #161b22; /* Slightly lighter dark */
-  --color-brand-accent: #ff9800;    /* Amber (darker tone) */
+  /* Text */
+  --color-text: #f9fafb;      /* Light text */
 
-  --color-gray-50: #f9fafb;  /* Light text */
-  --color-gray-900: #0a0a0a; /* Darker gray background */
+  /* Brand (adjusted for readability in dark mode) */
+  --color-brand-primary: #90caf9;    /* Soft Blue */
+  --color-brand-secondary: #5c6bc0;  /* Indigo lighter */
+  --color-brand-accent: #ffb74d;     /* Amber (warmer) */
+ --color-text-contrast: #111827; /* dark text on light brand colors */
 }
 
+/* ===================== */
+/* Shared Elements       */
+/* ===================== */
+html {
+  scroll-behavior: smooth;
+}
 
-@custom-variant dark (&:where(.dark, .dark *));
-
-
-button{
+button {
   cursor: pointer;
 }
 
 h1, h2, h3 {
   font-family: var(--font-heading);
+}
+
+input {
+  padding: 8px;
 }
