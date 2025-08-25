@@ -39,3 +39,4 @@ body: { stallNumber, type, monthlyRent }
 ⌛Payment flows later
 
 
+ "$2b$12$JjLUjgJzXIDoCrddNA.k.uhORuWh3oBt/OzF0U/vrcUjl69vP7N5y"

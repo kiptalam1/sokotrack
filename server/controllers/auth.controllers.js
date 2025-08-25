@@ -31,6 +31,7 @@ export const registerUser = async (req, res) => {
 			},
 		});
 
+		newUser.password = undefined;
 		res.status(201).json({
 			message: "Account was created successfully",
 			userId: newUser.id,
