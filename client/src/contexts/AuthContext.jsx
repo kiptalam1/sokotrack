@@ -1,4 +1,5 @@
 import { useContext, createContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const AuthContext = createContext();
@@ -7,7 +8,7 @@ export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [accessToken, setAccessToken] = useState(null);
 	const [loading, setLoading] = useState(false);
-
+	const navigate = useNavigate();
 	// login function;
 	const login = async (email, password) => {
 		setLoading(true);
@@ -27,6 +28,7 @@ export const AuthProvider = ({ children }) => {
 			setUser(data.user);
 			setAccessToken(data.accessToken);
 			toast.success(data.message || "Logged in successfully");
+			navigate("/dashboard");
 		} catch (error) {
 			console.error(error.message);
 			toast.error(error.message || "Login failed");
@@ -69,6 +71,18 @@ export const AuthProvider = ({ children }) => {
 			return null;
 		}
 	};
+
+	// refresh on app load;
+	useEffect(() => {
+		(async () => {
+			const token = await refreshAccessToken();
+			if (!token) {
+				setUser(null);
+				setAccessToken(null);
+			}
+			setLoading(false);
+		})();
+	}, []);
 
 	// auto-refresh token every 14 minutes;
 	useEffect(() => {

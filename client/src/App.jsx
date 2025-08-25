@@ -5,6 +5,7 @@ import LandingPage from "./pages/LandingPage";
 import { Route, Routes } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
 	return (
@@ -15,6 +16,9 @@ function App() {
 				<Route path="/" element={<LandingPage />} />
 				<Route path="/auth/register" element={<Register />} />
 				<Route path="/auth/login" element={<Login />} />
+
+				{/* private routes */}
+				<Route path="/dashboard" element={<Dashboard />} />
 			</Routes>
 		</>
 	);
