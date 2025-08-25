@@ -9,6 +9,7 @@ import {
 	loginUserValidator,
 } from "../validators/auth.validators.js";
 import { handleValidationErrors } from "../middlewares/validationErrors.middlewares.js";
+import { refreshAccessToken } from "../utils/token.utils.js";
 
 const router = express.Router();
 
@@ -21,6 +22,7 @@ router.post(
 );
 
 router.post("/login", loginUserValidator, handleValidationErrors, loginUser);
+router.get("/refresh", refreshAccessToken);
 router.post("/logout", logoutUser);
 
 

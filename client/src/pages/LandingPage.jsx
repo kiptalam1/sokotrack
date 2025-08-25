@@ -29,7 +29,9 @@ function LandingPage() {
 						className="bg-[var(--color-brand-secondary)] text-[var(--color-text-contrast)] px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition">
 						Register
 					</button>
-					<button className="border border-[var(--color-brand-accent)] text-[var(--color-brand-accent)] px-6 py-3 rounded-lg font-semibold hover:bg-[var(--color-brand-accent)] hover:text-[var(--color-text-contrast)] transition">
+					<button
+						onClick={() => navigate("/auth/login")}
+						className="border border-[var(--color-brand-accent)] text-[var(--color-brand-accent)] px-6 py-3 rounded-lg font-semibold hover:bg-[var(--color-brand-accent)] hover:text-[var(--color-text-contrast)] transition">
 						Login
 					</button>
 				</div>
