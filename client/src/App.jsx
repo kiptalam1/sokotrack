@@ -18,7 +18,7 @@ function App() {
 				<Route path="/auth/login" element={<Login />} />
 
 				{/* private routes */}
-				<Route path="/dashboard" element={<Dashboard />} />
+				<Route path="/dashboard/:role" element={<Dashboard />} />
 			</Routes>
 		</>
 	);

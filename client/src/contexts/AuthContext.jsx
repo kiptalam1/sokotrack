@@ -7,7 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [accessToken, setAccessToken] = useState(null);
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
 	// login function;
 	const login = async (email, password) => {
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
 			setUser(data.user);
 			setAccessToken(data.accessToken);
 			toast.success(data.message || "Logged in successfully");
-			navigate("/dashboard");
+			navigate(`/dashboard/${user.role}`, { replace: true });
 		} catch (error) {
 			console.error(error.message);
 			toast.error(error.message || "Login failed");

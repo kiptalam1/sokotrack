@@ -69,3 +69,14 @@ h1, h2, h3 {
 input {
   padding: 8px;
 }
+
+a{
+  color: var(--color-brand-primary);
+  font-style: italic;
+
+}
+
+a:hover {
+  color: var(--color-brand-secondary);
+  text-decoration: underline;
+}
