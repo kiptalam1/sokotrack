@@ -60,8 +60,8 @@ const Navbar = () => {
 					</a>
 				</li>
 				<li>
-					<a href="#" className="hover:text-[var(--color-brand-accent)]">
-						Features
+					<a href="/markets" className="hover:text-[var(--color-brand-accent)]">
+						Markets
 					</a>
 				</li>
 				<li>
