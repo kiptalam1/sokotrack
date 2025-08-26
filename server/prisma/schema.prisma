@@ -12,8 +12,10 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      Role     @default(trader)
+  role      Role     @default(user)
   createdAt DateTime @default(now())
+  trader    Trader?
+  applications Application[]
 }
 
 model Market {
@@ -42,13 +44,25 @@ model Stall {
 }
 
 model Trader {
-  id           String    @id @default(uuid())
-  name         String
-  nationalId   String    @unique
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  nationalId   String   @unique
   phone        String?
-  email        String?   @unique
-  registeredAt DateTime  @default(now())
+  registeredAt DateTime @default(now())
   bookings     Booking[]
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Application {
+  id         String            @id @default(uuid())
+  userId     String
+  nationalId String            @unique
+  phone      String?
+  status     ApplicationStatus @default(pending)
+  createdAt  DateTime          @default(now())
+
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Booking {
@@ -57,7 +71,7 @@ model Booking {
   traderId  String
   startDate DateTime
   endDate   DateTime?
-  status    BookingStatus @default(pending)
+  status    BookingStatus @default(active)
   createdAt DateTime      @default(now())
   stall     Stall         @relation(fields: [stallId], references: [id], onDelete: Cascade)
   trader    Trader        @relation(fields: [traderId], references: [id], onDelete: Cascade)
@@ -86,6 +100,7 @@ model MaintenanceRequest {
 
 /// Enums
 enum Role {
+  user
   admin
   officer
   trader
@@ -105,10 +120,15 @@ enum StallStatus {
   maintenance
 }
 
+enum ApplicationStatus {
+  pending
+  approved
+  rejected
+}
+
 enum BookingStatus {
   active
   ended
-  pending
 }
 
 enum PaymentMethod {

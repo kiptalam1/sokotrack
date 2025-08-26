@@ -1,14 +1,17 @@
 -- CreateEnum
-CREATE TYPE "public"."Role" AS ENUM ('admin', 'officer');
+CREATE TYPE "public"."Role" AS ENUM ('user', 'admin', 'officer', 'trader');
 
 -- CreateEnum
 CREATE TYPE "public"."StallType" AS ENUM ('retail', 'wholesale', 'food', 'other');
 
 -- CreateEnum
-CREATE TYPE "public"."StallStatus" AS ENUM ('available', 'occupied', 'maintenance');
+CREATE TYPE "public"."StallStatus" AS ENUM ('available', 'occupied', 'reserved', 'maintenance');
 
 -- CreateEnum
-CREATE TYPE "public"."BookingStatus" AS ENUM ('active', 'ended', 'pending');
+CREATE TYPE "public"."ApplicationStatus" AS ENUM ('pending', 'approved', 'rejected');
+
+-- CreateEnum
+CREATE TYPE "public"."BookingStatus" AS ENUM ('active', 'ended');
 
 -- CreateEnum
 CREATE TYPE "public"."PaymentMethod" AS ENUM ('mpesa', 'cash', 'bank');
@@ -18,11 +21,11 @@ CREATE TYPE "public"."MaintenanceStatus" AS ENUM ('open', 'in_progress', 'closed
 
 -- CreateTable
 CREATE TABLE "public"."User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" "public"."Role" NOT NULL,
+    "role" "public"."Role" NOT NULL DEFAULT 'user',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -30,7 +33,7 @@ CREATE TABLE "public"."User" (
 
 -- CreateTable
 CREATE TABLE "public"."Market" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "location" TEXT,
     "county" TEXT NOT NULL,
@@ -41,8 +44,8 @@ CREATE TABLE "public"."Market" (
 
 -- CreateTable
 CREATE TABLE "public"."Stall" (
-    "id" SERIAL NOT NULL,
-    "marketId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "marketId" TEXT NOT NULL,
     "stallNumber" TEXT NOT NULL,
     "type" "public"."StallType" NOT NULL,
     "status" "public"."StallStatus" NOT NULL DEFAULT 'available',
@@ -53,24 +56,35 @@ CREATE TABLE "public"."Stall" (
 
 -- CreateTable
 CREATE TABLE "public"."Trader" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "nationalId" TEXT NOT NULL,
     "phone" TEXT,
-    "email" TEXT,
     "registeredAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Trader_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
+CREATE TABLE "public"."Application" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "nationalId" TEXT NOT NULL,
+    "phone" TEXT,
+    "status" "public"."ApplicationStatus" NOT NULL DEFAULT 'pending',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Application_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "public"."Booking" (
-    "id" SERIAL NOT NULL,
-    "stallId" INTEGER NOT NULL,
-    "traderId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "stallId" TEXT NOT NULL,
+    "traderId" TEXT NOT NULL,
     "startDate" TIMESTAMP(3) NOT NULL,
     "endDate" TIMESTAMP(3),
-    "status" "public"."BookingStatus" NOT NULL DEFAULT 'pending',
+    "status" "public"."BookingStatus" NOT NULL DEFAULT 'active',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Booking_pkey" PRIMARY KEY ("id")
@@ -78,8 +92,8 @@ CREATE TABLE "public"."Booking" (
 
 -- CreateTable
 CREATE TABLE "public"."Payment" (
-    "id" SERIAL NOT NULL,
-    "bookingId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "bookingId" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
     "method" "public"."PaymentMethod" NOT NULL,
     "paidAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -89,8 +103,8 @@ CREATE TABLE "public"."Payment" (
 
 -- CreateTable
 CREATE TABLE "public"."MaintenanceRequest" (
-    "id" SERIAL NOT NULL,
-    "stallId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "stallId" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "status" "public"."MaintenanceStatus" NOT NULL DEFAULT 'open',
     "reportedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -102,19 +116,31 @@ CREATE TABLE "public"."MaintenanceRequest" (
 CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Market_name_county_key" ON "public"."Market"("name", "county");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Stall_marketId_stallNumber_key" ON "public"."Stall"("marketId", "stallNumber");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Trader_userId_key" ON "public"."Trader"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Trader_nationalId_key" ON "public"."Trader"("nationalId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Trader_email_key" ON "public"."Trader"("email");
+CREATE UNIQUE INDEX "Application_nationalId_key" ON "public"."Application"("nationalId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Booking_stallId_traderId_startDate_key" ON "public"."Booking"("stallId", "traderId", "startDate");
 
 -- AddForeignKey
 ALTER TABLE "public"."Stall" ADD CONSTRAINT "Stall_marketId_fkey" FOREIGN KEY ("marketId") REFERENCES "public"."Market"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."Trader" ADD CONSTRAINT "Trader_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."Application" ADD CONSTRAINT "Application_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Booking" ADD CONSTRAINT "Booking_stallId_fkey" FOREIGN KEY ("stallId") REFERENCES "public"."Stall"("id") ON DELETE CASCADE ON UPDATE CASCADE;

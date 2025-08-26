@@ -27,7 +27,6 @@ export const registerUser = async (req, res) => {
 				name,
 				email,
 				password: hashedPassword,
-				// role: "trader",
 			},
 		});
 
@@ -102,11 +101,47 @@ export const getMe = async (req, res) => {
 	try {
 		const user = await prisma.user.findUnique({
 			where: { id: req.user.userId },
-			select: { id: true, name: true, email: true, role: true },
+			select: {
+				id: true,
+				name: true,
+				email: true,
+				role: true,
+				trader: {
+					select: {
+						id: true,
+						nationalId: true,
+						phone: true,
+						bookings: {
+							orderBy: { createdAt: "desc" },
+							take: 1, // latest booking/application
+							select: {
+								id: true,
+								status: true,
+								startDate: true,
+								endDate: true,
+								stall: {
+									select: {
+										id: true,
+										stallNumber: true,
+										type: true,
+										market: {
+											select: { id: true, name: true, county: true },
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
 		});
+
 		if (!user) return res.status(404).json({ error: "User not found" });
+
 		res.json({ user });
 	} catch (err) {
+		console.error(err);
 		res.status(500).json({ error: "Internal server error" });
 	}
 };
+

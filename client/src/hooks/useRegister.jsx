@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { toast } from "sonner";
-
+import { useNavigate } from "react-router-dom";
 
 const useRegister = () => {
+	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
 		name: "",
 		email: "",
@@ -40,9 +41,10 @@ const useRegister = () => {
 					body: JSON.stringify(formData),
 				});
 
-				if (!res.ok) throw new Error("Failed to register user");
-
 				const data = await res.json();
+
+				if (!res.ok) throw new Error(data.error || "Failed to register user");
+
 				// console.log("registration data :", data);
 
 				setFormData({
@@ -55,7 +57,10 @@ const useRegister = () => {
 			})(),
 			{
 				loading: "Registering...",
-				success: (msg) => msg,
+				success: (msg) => {
+					navigate("/auth/login");
+					return msg;
+				},
 				error: (err) => err.message || "Something went wrong",
 			}
 		);
