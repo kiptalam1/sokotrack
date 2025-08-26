@@ -25,10 +25,10 @@ export const AuthProvider = ({ children }) => {
 				throw new Error(data.error || "Login failed");
 			}
 
-			setUser(data.user);
+			setUser(data?.user);
 			setAccessToken(data.accessToken);
 			toast.success(data.message || "Logged in successfully");
-			navigate(`/dashboard/${user.role}`, { replace: true });
+			navigate(`/dashboard/${user?.role}`, { replace: true });
 		} catch (error) {
 			console.error(error.message);
 			toast.error(error.message || "Login failed");
@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }) => {
 			setUser(null);
 			setAccessToken(null);
 			toast.success("Logged out successfully");
+			navigate("/auth/login");
 		} catch (error) {
 			console.error(error.message);
 			toast.error("Failed to log out");

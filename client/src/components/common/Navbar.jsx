@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Menu, X, MoonIcon, SunIcon } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Navbar = () => {
 	const [dark, setDark] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
+	const { loading, user, logout } = useAuth();
 
 	useEffect(() => {
 		const stored = localStorage.getItem("theme");
@@ -67,6 +69,19 @@ const Navbar = () => {
 						Contact
 					</a>
 				</li>
+				{!loading && user && (
+					<button
+						onClick={logout}
+						className="
+      text-white bg-red-400 hover:bg-red-600
+      font-semibold px-3 py-1 rounded-lg
+      transition-colors duration-200
+      shadow-sm hover:shadow-md
+      focus:outline-none focus:ring-2 focus:ring-red-400
+    ">
+						Logout
+					</button>
+				)}
 				<li>
 					<button
 						onClick={toggleTheme}
