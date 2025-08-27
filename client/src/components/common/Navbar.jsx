@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Menu, X, MoonIcon, SunIcon } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
 	const [dark, setDark] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
-	const { loading, user, logout } = useAuth();
+	const { user, logout } = useAuth();
 
 	useEffect(() => {
 		const stored = localStorage.getItem("theme");
@@ -29,6 +30,14 @@ const Navbar = () => {
 		localStorage.setItem("theme", next ? "dark" : "light");
 	};
 
+	// 🔑 helper for active link styling
+	const linkClass = ({ isActive }) =>
+		`${
+			isActive
+				? "text-[var(--color-brand-accent)] font-semibold border-b-2 border-[var(--color-brand-accent)]"
+				: ""
+		} hover:text-[var(--color-brand-accent)]`;
+
 	return (
 		<nav className="relative flex items-center justify-between p-4 sm:py-6 shadow-md bg-[var(--color-bg)] border-b border-[var(--color-border)]">
 			{/* Logo */}
@@ -50,37 +59,32 @@ const Navbar = () => {
 			{/* Desktop menu */}
 			<ul className="hidden sm:flex items-center gap-6 font-sans text-[var(--color-text)] mr-2">
 				<li>
-					<a href="#" className="hover:text-[var(--color-brand-accent)]">
-						Home
-					</a>
+					<NavLink
+						to={user ? `/dashboard/${user.role}` : "/"}
+						end
+						className={linkClass}>
+						{user ? "Dashboard" : "Home"}
+					</NavLink>
 				</li>
+
 				<li>
-					<a href="#" className="hover:text-[var(--color-brand-accent)]">
-						About
-					</a>
-				</li>
-				<li>
-					<a href="/markets" className="hover:text-[var(--color-brand-accent)]">
+					<NavLink to="/markets" className={linkClass}>
 						Markets
-					</a>
+					</NavLink>
 				</li>
 				<li>
-					<a href="#" className="hover:text-[var(--color-brand-accent)]">
+					<NavLink to="/contact" className={linkClass}>
 						Contact
-					</a>
+					</NavLink>
 				</li>
-				{!loading && user && (
-					<button
-						onClick={logout}
-						className="
-      text-white bg-red-400 hover:bg-red-600
-      font-semibold px-3 py-1 rounded-lg
-      transition-colors duration-200
-      shadow-sm hover:shadow-md
-      focus:outline-none focus:ring-2 focus:ring-red-400
-    ">
-						Logout
-					</button>
+				{user && (
+					<li>
+						<button
+							onClick={logout}
+							className="text-white bg-red-400 hover:bg-red-600 font-semibold px-3 py-1 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-400">
+							Logout
+						</button>
+					</li>
 				)}
 				<li>
 					<button
@@ -98,25 +102,33 @@ const Navbar = () => {
 				}`}>
 				<ul className="flex flex-col space-y-4 px-6 py-2 font-sans text-[var(--color-text)]">
 					<li>
-						<a href="#" className="hover:text-[var(--color-brand-accent)]">
+						<NavLink
+							to={user ? `/dashboard/${user.role}` : "/"}
+							end
+							className={linkClass}>
 							Home
-						</a>
+						</NavLink>
+					</li>
+
+					<li>
+						<NavLink to="/markets" className={linkClass}>
+							Markets
+						</NavLink>
 					</li>
 					<li>
-						<a href="#" className="hover:text-[var(--color-brand-accent)]">
-							About
-						</a>
-					</li>
-					<li>
-						<a href="#" className="hover:text-[var(--color-brand-accent)]">
-							Features
-						</a>
-					</li>
-					<li>
-						<a href="#" className="hover:text-[var(--color-brand-accent)]">
+						<NavLink to="/contact" className={linkClass}>
 							Contact
-						</a>
+						</NavLink>
 					</li>
+					{user && (
+						<li>
+							<button
+								onClick={logout}
+								className="text-white bg-red-400 hover:bg-red-600 font-semibold px-3 py-1 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-400">
+								Logout
+							</button>
+						</li>
+					)}
 					<li>
 						<button
 							onClick={toggleTheme}

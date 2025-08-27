@@ -77,6 +77,6 @@ a{
 }
 
 a:hover {
-  color: var(--color-brand-secondary);
-  text-decoration: underline;
+  color: var(--color-brand-accent);
+  /* text-decoration: underline; */
 }
