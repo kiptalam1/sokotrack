@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Edit, Trash } from "lucide-react";
 import MarketModal from "../modals/MarketModal";
 import useCreateMarket from "../../hooks/useCreateMarket";
@@ -15,54 +15,9 @@ const AdminMarkets = ({
 	const [isModalOpen, setIsOpenModal] = useState(false);
 	const [mode, setMode] = useState("create"); // "create" | "edit"
 	const [selectedMarket, setSelectedMarket] = useState(null);
-	const {
-		loading: loadingCreateMarket,
-		error: errorCreateMarket,
-		createMarket,
-	} = useCreateMarket();
-
-	const {
-		loading: loadingUpdateMarket,
-		error: errorUpdateMarket,
-		updateMarket,
-	} = useUpdateMarket();
-
-	const {
-		loading: loadingDeleteMarket,
-		error: errorDeleteMarket,
-		deleteResource,
-	} = useDelete();
-
-	if (
-		loadingMarkets ||
-		loadingCreateMarket ||
-		loadingUpdateMarket ||
-		loadingDeleteMarket
-	) {
-		return <p className="text-center">loading...</p>;
-	}
-
-	if (errorMarkets) {
-		return <p className="text-center text-red-500">{errorMarkets.message}</p>;
-	}
-
-	if (errorCreateMarket) {
-		return (
-			<p className="text-center text-red-500">{errorCreateMarket.message}</p>
-		);
-	}
-
-	if (errorUpdateMarket) {
-		return (
-			<p className="text-center text-red-500">{errorUpdateMarket.message}</p>
-		);
-	}
-
-	if (errorDeleteMarket) {
-		return (
-			<p className="text-center text-red-500">{errorDeleteMarket.message}</p>
-		);
-	}
+	const { loading: loadingCreateMarket, createMarket } = useCreateMarket();
+	const { loading: loadingUpdateMarket, updateMarket } = useUpdateMarket();
+	const { loading: loadingDeleteMarket, deleteResource } = useDelete();
 
 	const handleSubmit = async (formData) => {
 		if (mode === "create") {
@@ -87,18 +42,24 @@ const AdminMarkets = ({
 		const result = await deleteResource(`/api/markets/${id}`);
 		if (result) {
 			await refetch();
+			setSelectedMarket(null);
 		}
 	};
 	return (
-		<div className="w-full h-full flex flex-col items-center gap-4 py-4 px-4 sm:px-8 md:px-12 lg:px-16 border border-white">
+		<div className="overflow-x-auto w-full h-full flex flex-col items-center gap-4 py-4 px-4 sm:px-8 md:px-12 lg:px-16 border border-white">
 			<button
 				type="button"
+				disabled={loadingCreateMarket}
 				onClick={() => {
 					setMode("create");
 					setIsOpenModal(true);
 				}}
-				className="self-end bg-[var(--color-brand-secondary)] hover:bg-[var(--color-brand-primary)] py-1 px-2 rounded-lg text-[var(--color-text-contrast)]transition-all duration-200">
-				Add Market
+				className="self-end flex items-center gap-1 bg-[var(--color-brand-secondary)] hover:bg-[var(--color-brand-primary)] py-1 px-2 rounded-lg text-[var(--color-text-contrast)] transition-all duration-200">
+				{loadingCreateMarket ? (
+					<div className="w-4 h-4 border-2 border-white border-dashed rounded-full animate-spin"></div>
+				) : (
+					"Add Market"
+				)}
 			</button>
 			<MarketModal
 				isOpen={isModalOpen}
@@ -108,37 +69,76 @@ const AdminMarkets = ({
 				onCancel={() => setIsOpenModal(false)}
 			/>
 
-			{!data?.markets || data.markets.length === 0 ? (
-				<p>You have not added any market yet</p>
-			) : (
-				<ul>
-					{data.markets.map((m) => (
-						<li key={m.id}>
-							{m.name} {m.county} {m.location} {m.createdAt.split("T")[0]}
-							<div className="inline ml-4">
-								<button
-									onClick={() => {
-										setIsOpenModal(true);
-										setMode("edit");
-										setSelectedMarket(m);
-									}}>
-									<Edit
-										size={16}
-										className="mr-2 text-[var(--color-brand-secondary)]"
-									/>
-								</button>
-								<button
-									disabled={loadingDeleteMarket}
-									onClick={() => {
-										handleDelete(m.id);
-									}}>
-									<Trash size={16} className="text-red-500" />
-								</button>
-							</div>
-						</li>
-					))}
-				</ul>
+			{loadingMarkets && (
+				<div className="animate-spin border-4 border-blue-500 border-dashed w-6 h-6 mx-auto my-4 rounded-full"></div>
 			)}
+
+			{errorMarkets && <p className="text-red-500">{errorMarkets.message}</p>}
+
+			<table className="min-w-full bg-[var(--color-card)] text-[var(--color-text)]">
+				<thead className="bg-[var(--color-brand-primary)] text-[var(--color-text-contrast)]">
+					<tr>
+						<th className="py-2 px-4 text-left">Market</th>
+						<th className="py-2 px-4 text-left">Location</th>
+						<th className="py-2 px-4 text-left">County</th>
+						<th className="py-2 px-4 text-left hidden sm:table-cell">Date</th>
+						<th className="py-2 px-4 text-left">Actions</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					{!data?.markets || data.markets.length === 0 ? (
+						<tr>
+							<td colSpan="5" className="text-center py-4">
+								No markets available
+							</td>
+						</tr>
+					) : (
+						data.markets.map((market) => (
+							<tr key={market.id} className="">
+								<td className="py-2 px-4">{market.name}</td>
+								<td className="py-2 px-4">{market.location}</td>
+								<td className="py-2 px-4">{market.county}</td>
+								<td className="py-2 px-4 hidden sm:table-cell">
+									{market.createdAt.split("T")[0]}
+								</td>
+								<td className="py-3 px-4 space-x-4">
+									<button
+										disabled={loadingUpdateMarket}
+										onClick={() => {
+											setIsOpenModal(true);
+											setMode("edit");
+											setSelectedMarket(market);
+										}}>
+										{loadingUpdateMarket ? (
+											<div className="w-4 h-4 border-2 border-blue-500 border-dashed rounded-full animate-spin"></div>
+										) : (
+											<Edit
+												size={20}
+												className="text-[var(--color-brand-secondary)] hover:text-[var(--color-brand-primary)]"
+											/>
+										)}
+									</button>
+									<button
+										disabled={loadingDeleteMarket}
+										onClick={() => {
+											handleDelete(market.id);
+										}}>
+										{loadingDeleteMarket ? (
+											<div className="w-4 h-4 border-2 border-red-500 border-dashed rounded-full animate-spin"></div>
+										) : (
+											<Trash
+												size={20}
+												className="text-red-500 hover:text-red-700"
+											/>
+										)}
+									</button>
+								</td>
+							</tr>
+						))
+					)}
+				</tbody>
+			</table>
 		</div>
 	);
 };
