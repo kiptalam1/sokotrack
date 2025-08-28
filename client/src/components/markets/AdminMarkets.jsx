@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Edit, Trash } from "lucide-react";
 import MarketModal from "../modals/MarketModal";
 import useCreateMarket from "../../hooks/useCreateMarket";
@@ -8,8 +8,9 @@ const AdminMarkets = ({
 	data,
 	error: errorMarkets,
 	loading: loadingMarkets,
+	refetch,
 }) => {
-	const [markets, setMarkets] = useState(data?.markets || []);
+	// const [markets, setMarkets] = useState(data?.markets || []);
 	const [isModalOpen, setIsOpenModal] = useState(false);
 	const [mode, setMode] = useState("create"); // "create" | "edit"
 	const [selectedMarket, setSelectedMarket] = useState(null);
@@ -25,9 +26,9 @@ const AdminMarkets = ({
 		updateMarket,
 	} = useUpdateMarket();
 
-	useEffect(() => {
-		if (data?.markets) setMarkets(data.markets);
-	}, [data]);
+	// useEffect(() => {
+	// 	if (data?.markets) setMarkets(data.markets);
+	// }, [data]);
 
 	if (loadingMarkets || loadingCreateMarket || loadingUpdateMarket) {
 		return <p className="text-center">loading...</p>;
@@ -53,16 +54,14 @@ const AdminMarkets = ({
 		if (mode === "create") {
 			const result = await createMarket(formData);
 			if (result) {
-				setMarkets((prev) => [...prev, result.market]);
+				await refetch(); // pull fresh data from backend
 				setIsOpenModal(false);
 				setSelectedMarket(null);
 			}
 		} else if (mode === "edit") {
 			const result = await updateMarket(selectedMarket.id, formData);
 			if (result) {
-				setMarkets((prev) =>
-					prev.map((m) => (m.id === selectedMarket.id ? result.market : m))
-				);
+				await refetch(); // refresh with updated data
 				setIsOpenModal(false);
 				setSelectedMarket(null);
 			}
@@ -73,7 +72,10 @@ const AdminMarkets = ({
 		<div className="w-full h-full flex flex-col items-center gap-4 py-4 px-4 sm:px-8 md:px-12 lg:px-16 border border-white">
 			<button
 				type="button"
-				onClick={() => setIsOpenModal(!isModalOpen)}
+				onClick={() => {
+					setMode("create");
+					setIsOpenModal(true);
+				}}
 				className="self-end bg-[var(--color-brand-secondary)] hover:bg-[var(--color-brand-primary)] py-1 px-2 rounded-lg text-[var(--color-text-contrast)]transition-all duration-200">
 				Add Market
 			</button>
@@ -85,11 +87,11 @@ const AdminMarkets = ({
 				onCancel={() => setIsOpenModal(false)}
 			/>
 
-			{markets.length === 0 ? (
+			{!data?.markets || data.markets.length === 0 ? (
 				<p>You have not added any market yet</p>
 			) : (
 				<ul>
-					{markets.map((m) => (
+					{data.markets.map((m) => (
 						<li key={m.id}>
 							{m.name} {m.county} {m.location} {m.createdAt.split("T")[0]}
 							<div className="inline ml-4">

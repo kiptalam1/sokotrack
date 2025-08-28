@@ -10,6 +10,7 @@ const Markets = () => {
 		data,
 		loading: fetchMarketsLoading,
 		error,
+		refetch,
 	} = useFetch("/api/markets/");
 
 	if (authLoading) {
@@ -24,6 +25,7 @@ const Markets = () => {
 						data={data}
 						error={error}
 						loading={fetchMarketsLoading}
+						refetch={refetch}
 					/>
 				</>
 			)}
