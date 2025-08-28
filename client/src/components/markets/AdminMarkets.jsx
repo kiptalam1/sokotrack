@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Edit, Trash } from "lucide-react";
 import MarketModal from "../modals/MarketModal";
 import useCreateMarket from "../../hooks/useCreateMarket";
+import useUpdateMarket from "../../hooks/useUpdateMarket";
 
 const AdminMarkets = ({
 	data,
@@ -18,11 +19,17 @@ const AdminMarkets = ({
 		createMarket,
 	} = useCreateMarket();
 
+	const {
+		loading: loadingUpdateMarket,
+		error: errorUpdateMarket,
+		updateMarket,
+	} = useUpdateMarket();
+
 	useEffect(() => {
 		if (data?.markets) setMarkets(data.markets);
 	}, [data]);
 
-	if (loadingMarkets || loadingCreateMarket) {
+	if (loadingMarkets || loadingCreateMarket || loadingUpdateMarket) {
 		return <p className="text-center">loading...</p>;
 	}
 
@@ -36,12 +43,29 @@ const AdminMarkets = ({
 		);
 	}
 
+	if (errorUpdateMarket) {
+		return (
+			<p className="text-center text-red-500">{errorUpdateMarket.message}</p>
+		);
+	}
+
 	const handleSubmit = async (formData) => {
-		const result = await createMarket(formData);
-		if (result) {
-			setMarkets((prev) => [...prev, result.market]);
-			setIsOpenModal(false);
-			setSelectedMarket(null);
+		if (mode === "create") {
+			const result = await createMarket(formData);
+			if (result) {
+				setMarkets((prev) => [...prev, result.market]);
+				setIsOpenModal(false);
+				setSelectedMarket(null);
+			}
+		} else if (mode === "edit") {
+			const result = await updateMarket(selectedMarket.id, formData);
+			if (result) {
+				setMarkets((prev) =>
+					prev.map((m) => (m.id === selectedMarket.id ? result.market : m))
+				);
+				setIsOpenModal(false);
+				setSelectedMarket(null);
+			}
 		}
 	};
 
@@ -73,6 +97,7 @@ const AdminMarkets = ({
 									onClick={() => {
 										setIsOpenModal(true);
 										setMode("edit");
+										setSelectedMarket(m);
 									}}>
 									<Edit
 										size={16}
