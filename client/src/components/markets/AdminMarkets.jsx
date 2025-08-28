@@ -46,7 +46,7 @@ const AdminMarkets = ({
 		}
 	};
 	return (
-		<div className="overflow-x-auto w-full h-full flex flex-col items-center gap-4 py-4 px-4 sm:px-8 md:px-12 lg:px-16 border border-white">
+		<div className="overflow-x-auto w-full h-full flex flex-col items-center gap-4 py-4 px-4 sm:px-8 md:px-12 lg:px-16">
 			<button
 				type="button"
 				disabled={loadingCreateMarket}
@@ -75,7 +75,7 @@ const AdminMarkets = ({
 
 			{errorMarkets && <p className="text-red-500">{errorMarkets.message}</p>}
 
-			<table className="min-w-full bg-[var(--color-card)] text-[var(--color-text)]">
+			<table className="min-w-full bg-[var(--color-card)] text-[var(--color-text)] rounded">
 				<thead className="bg-[var(--color-brand-primary)] text-[var(--color-text-contrast)]">
 					<tr>
 						<th className="py-2 px-4 text-left">Market</th>
