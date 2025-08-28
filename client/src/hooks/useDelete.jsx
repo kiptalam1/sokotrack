@@ -7,17 +7,16 @@ const useDelete = () => {
 	const [error, setError] = useState(null);
 	const { apiFetch } = useApi();
 
-	const deleteMarketOrStall = async (id, data) => {
+	const deleteResource = async (url) => {
 		setLoading(true);
 		setError(null);
 
 		try {
-			const res = await apiFetch(`/api/markets/${id}`, {
+			const res = await apiFetch(url, {
 				method: "DELETE",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(data),
 				credentials: "include",
 			});
 
@@ -40,7 +39,7 @@ const useDelete = () => {
 	return {
 		loading,
 		error,
-		deleteMarketOrStall,
+		deleteResource,
 	};
 };
 

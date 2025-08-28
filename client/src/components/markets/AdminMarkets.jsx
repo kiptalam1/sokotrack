@@ -3,6 +3,7 @@ import { Edit, Trash } from "lucide-react";
 import MarketModal from "../modals/MarketModal";
 import useCreateMarket from "../../hooks/useCreateMarket";
 import useUpdateMarket from "../../hooks/useUpdateMarket";
+import useDelete from "../../hooks/useDelete";
 
 const AdminMarkets = ({
 	data,
@@ -26,11 +27,18 @@ const AdminMarkets = ({
 		updateMarket,
 	} = useUpdateMarket();
 
-	// useEffect(() => {
-	// 	if (data?.markets) setMarkets(data.markets);
-	// }, [data]);
+	const {
+		loading: loadingDeleteMarket,
+		error: errorDeleteMarket,
+		deleteResource,
+	} = useDelete();
 
-	if (loadingMarkets || loadingCreateMarket || loadingUpdateMarket) {
+	if (
+		loadingMarkets ||
+		loadingCreateMarket ||
+		loadingUpdateMarket ||
+		loadingDeleteMarket
+	) {
 		return <p className="text-center">loading...</p>;
 	}
 
@@ -47,6 +55,12 @@ const AdminMarkets = ({
 	if (errorUpdateMarket) {
 		return (
 			<p className="text-center text-red-500">{errorUpdateMarket.message}</p>
+		);
+	}
+
+	if (errorDeleteMarket) {
+		return (
+			<p className="text-center text-red-500">{errorDeleteMarket.message}</p>
 		);
 	}
 
@@ -68,6 +82,13 @@ const AdminMarkets = ({
 		}
 	};
 
+	const handleDelete = async (id) => {
+		if (!window.confirm("Are you sure you want to delete this market?")) return;
+		const result = await deleteResource(`/api/markets/${id}`);
+		if (result) {
+			await refetch();
+		}
+	};
 	return (
 		<div className="w-full h-full flex flex-col items-center gap-4 py-4 px-4 sm:px-8 md:px-12 lg:px-16 border border-white">
 			<button
@@ -106,7 +127,11 @@ const AdminMarkets = ({
 										className="mr-2 text-[var(--color-brand-secondary)]"
 									/>
 								</button>
-								<button>
+								<button
+									disabled={loadingDeleteMarket}
+									onClick={() => {
+										handleDelete(m.id);
+									}}>
 									<Trash size={16} className="text-red-500" />
 								</button>
 							</div>
