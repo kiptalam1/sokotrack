@@ -1,12 +1,64 @@
-# React + Vite
+# SokoTrack
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 1. Make sure you’re on main and up to date
+git checkout main
+git pull origin main
 
-Currently, two official plugins are available:
+# 2. Create and switch to a new feature branch
+git checkout -b feature/your-feature-name
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# 3. Work on code, then stage and commit changes
+git add .
+git commit -m "your commit message"
 
-## Expanding the ESLint configuration
+# 4. Push the new branch to remote (first time only)
+git push -u origin feature/your-feature-name
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+# 5. When done, go back to main and update
+git checkout main
+git pull origin main
+
+# 6. Merge your feature branch into main
+git merge feature/your-feature-name
+
+# 7. Push updated main
+git push origin main
+
+# 8. (Optional) Delete the feature branch locally and remotely
+git branch -d feature/your-feature-name
+git push origin --delete feature/your-feature-name
+
+#############################################
+## REBASE:
+# 1. Make sure you’re on main and up to date
+git checkout main
+git pull origin main
+
+# 2. Create and switch to a new feature branch
+git checkout -b feature/your-feature-name
+
+# 3. Work on code, then stage and commit changes
+git add .
+git commit -m "your commit message"
+
+# 4. Push the new branch to remote (first time only)
+git push -u origin feature/your-feature-name
+
+# 5. When done, go back to main and update
+git checkout main
+git pull origin main
+
+# 6. Rebase feature branch onto latest main
+git checkout feature/your-feature-name
+git rebase main
+
+# 7. Switch back to main and fast-forward merge
+git checkout main
+git merge feature/your-feature-name
+
+# 8. Push updated main
+git push origin main
+
+# 9. (Optional) Delete the feature branch locally and remotely
+git branch -d feature/your-feature-name
+git push origin --delete feature/your-feature-name
