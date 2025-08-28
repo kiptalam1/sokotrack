@@ -69,7 +69,11 @@ const AdminMarkets = ({
 						<li key={m.id}>
 							{m.name} {m.county} {m.location} {m.createdAt.split("T")[0]}
 							<div className="inline ml-4">
-								<button>
+								<button
+									onClick={() => {
+										setIsOpenModal(true);
+										setMode("edit");
+									}}>
 									<Edit
 										size={16}
 										className="mr-2 text-[var(--color-brand-secondary)]"
