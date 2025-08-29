@@ -74,7 +74,7 @@ const Navbar = () => {
 				</li>
 				{user && user.role === "admin" && (
 					<li>
-						<NavLink to={`/stalls/:${user.role}`} className={linkClass}>
+						<NavLink to={`/stalls/${user.role}`} className={linkClass}>
 							Stalls
 						</NavLink>
 					</li>

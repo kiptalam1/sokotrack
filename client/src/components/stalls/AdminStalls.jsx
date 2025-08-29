@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import StallModal from "../modals/StallModal";
+import { useParams } from "react-router-dom";
+import useCreateStall from "../../hooks/useCreateStall";
+import { Edit, Trash } from "lucide-react";
 
 const AdminStalls = ({
 	data,
@@ -7,7 +11,27 @@ const AdminStalls = ({
 	refetch: fetchData,
 }) => {
 	const { pagination } = data || {};
-	console.log("pagination :", pagination);
+	const { id } = useParams();
+	const [isOpen, setIsOpen] = useState(false);
+	const [mode, _setMode] = useState("create"); // 'create' or 'edit'
+	const [selectedStall, setSelectedStall] = useState(null);
+	const { loading: _loadingCreate, _error, createStall } = useCreateStall();
+
+	// console.log("id", id);
+
+	// create new stall;
+	const handleSubmit = async (formData) => {
+		// const payload = {...formData, id}
+		if (mode === "create") {
+			const result = await createStall(formData, id);
+			console.log("result :", result);
+			if (result) {
+				setIsOpen(false);
+				setSelectedStall(false);
+				fetchData();
+			}
+		}
+	};
 
 	const handlePageChange = (newPage) => {
 		if (newPage < 1 || newPage > pagination.totalPages) return;
@@ -19,6 +43,21 @@ const AdminStalls = ({
 				<div className="animate-spin border-4 border-blue-500 border-dashed w-6 h-6 mx-auto my-4 rounded-full"></div>
 			)}
 			{errorFetching && <p className="text-red-500">{errorFetching.message}</p>}
+
+			<button
+				type="button"
+				onClick={() => setIsOpen(true)}
+				className="self-end flex items-center gap-1 bg-[var(--color-brand-secondary)] hover:bg-[var(--color-brand-primary)] py-1 px-2 rounded-lg text-[var(--color-text-contrast)] transition-all duration-200">
+				Add Stall
+			</button>
+
+			<StallModal
+				initialData={selectedStall}
+				mode={mode}
+				isOpen={isOpen}
+				onCancel={() => setIsOpen(false)}
+				onSubmit={(formData) => handleSubmit(formData)}
+			/>
 
 			<table className="min-w-full bg-[var(--color-card)] text-[var(--color-text)] rounded">
 				<thead className="bg-[var(--color-brand-primary)] text-[var(--color-text-contrast)]">
@@ -44,10 +83,10 @@ const AdminStalls = ({
 							<tr key={stall.id} className="">
 								<td className="py-2 px-4">{stall.stallNumber}</td>
 								<td className="py-2 px-4">{stall.type}</td>
-								<td className="py-2 px-4">{stall.rent}</td>
+								<td className="py-2 px-4">{stall.monthlyRent}</td>
 								<td className="py-2 px-4">{data.market?.name}</td>
 								<td className="py-2 px-4 hidden sm:table-cell">
-									{stall.createdAt.split("T")[0]}
+									{stall.createdAt?.split("T")[0]}
 								</td>
 								<td className="py-3 px-4 space-x-4">
 									<button disabled={loadingStalls}>
