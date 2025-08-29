@@ -73,6 +73,7 @@ input {
 a{
   /* color: var(--color-brand-primary); */
   font-style: italic;
+  transition: all 0.2s ease-out;
 
 }
 

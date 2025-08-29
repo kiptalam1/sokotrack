@@ -4,7 +4,7 @@ import useFetch from "../hooks/useFetch";
 import { Navigate, useParams } from "react-router-dom";
 import AdminStalls from "../components/stalls/AdminStalls";
 
-const Stalls = () => {
+const MarketStalls = () => {
 	const { loading: authLoading, user } = useAuth();
 	// const { id } = useParams();
 	const { id, role } = useParams();
@@ -50,4 +50,4 @@ const Stalls = () => {
 	);
 };
 
-export default Stalls;
+export default MarketStalls;
