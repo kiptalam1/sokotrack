@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Markets from "./pages/Markets";
+import Stalls from "./pages/Stalls";
 
 function App() {
 	return (
@@ -21,6 +22,7 @@ function App() {
 				{/* private routes */}
 				<Route path="/dashboard/:role" element={<Dashboard />} />
 				<Route path="/markets" element={<Markets />} />
+				<Route path="/markets/:id/stalls/:role" element={<Stalls />} />
 			</Routes>
 		</>
 	);

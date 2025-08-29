@@ -7,24 +7,29 @@ const useFetch = (url) => {
 	const [error, setError] = useState(null);
 	const { apiFetch } = useApi();
 
-	const fetchData = useCallback(async () => {
-		setLoading(true);
+	const fetchData = useCallback(
+		async (params = {}) => {
+			setLoading(true);
 
-		try {
-			const res = await apiFetch(url, { method: "GET" });
-			const result = await res.json();
+			try {
+				const query = new URLSearchParams(params).toString();
+				const finalUrl = query ? `${url}?${query}` : url;
+				const res = await apiFetch(finalUrl, { method: "GET" });
+				const result = await res.json();
 
-			if (!res.ok) throw new Error(result?.error || "Something went wrong");
+				if (!res.ok) throw new Error(result?.error || "Something went wrong");
 
-			setData(result);
-			setError(null);
-			// console.log("data", result);
-		} catch (err) {
-			setError(err);
-		} finally {
-			setLoading(false);
-		}
-	}, [url, apiFetch]);
+				setData(result);
+				setError(null);
+				// console.log("data", result);
+			} catch (err) {
+				setError(err);
+			} finally {
+				setLoading(false);
+			}
+		},
+		[url, apiFetch]
+	);
 
 	useEffect(() => {
 		fetchData();

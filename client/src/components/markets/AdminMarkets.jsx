@@ -4,6 +4,8 @@ import MarketModal from "../modals/MarketModal";
 import useCreateMarket from "../../hooks/useCreateMarket";
 import useUpdateMarket from "../../hooks/useUpdateMarket";
 import useDelete from "../../hooks/useDelete";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 const AdminMarkets = ({
 	data,
@@ -11,13 +13,14 @@ const AdminMarkets = ({
 	loading: loadingMarkets,
 	refetch,
 }) => {
-	// const [markets, setMarkets] = useState(data?.markets || []);
 	const [isModalOpen, setIsOpenModal] = useState(false);
 	const [mode, setMode] = useState("create"); // "create" | "edit"
 	const [selectedMarket, setSelectedMarket] = useState(null);
 	const { loading: loadingCreateMarket, createMarket } = useCreateMarket();
 	const { loading: loadingUpdateMarket, updateMarket } = useUpdateMarket();
 	const { loading: loadingDeleteMarket, deleteResource } = useDelete();
+
+	const { user } = useAuth();
 
 	const handleSubmit = async (formData) => {
 		if (mode === "create") {
@@ -102,7 +105,7 @@ const AdminMarkets = ({
 								<td className="py-2 px-4 hidden sm:table-cell">
 									{market.createdAt.split("T")[0]}
 								</td>
-								<td className="py-3 px-4 space-x-4">
+								<td className="py-3 px-4 space-x-4 flex items-center flex-nowrap">
 									<button
 										disabled={loadingUpdateMarket}
 										onClick={() => {
@@ -133,6 +136,11 @@ const AdminMarkets = ({
 											/>
 										)}
 									</button>
+									<Link
+										to={`/markets/${market.id}/stalls/${user?.role}`}
+										className="text-[var(--color-brand-primary)] hover:underline text-sm sm:text-base">
+										View stalls
+									</Link>
 								</td>
 							</tr>
 						))
