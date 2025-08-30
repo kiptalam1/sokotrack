@@ -124,13 +124,20 @@ export const getAllStallsInAMarket = async (req, res) => {
 		if (!market)
 			return res.status(404).json({ error: "This market does not exists" });
 
-		// then fetch the market stalls with pagination;
+		// then fetch the market stalls with pagination; select only needed fields
 		const stalls = await prisma.stall.findMany({
-			where: {
-				marketId,
-			},
+			where: { marketId },
 			skip,
 			take: limit,
+			select: {
+				id: true,
+				marketId: true,
+				stallNumber: true,
+				type: true,
+				status: true,
+				monthlyRent: true,
+				createdAt: true,
+			},
 		});
 
 		// Count total stalls for pagination info

@@ -36,6 +36,7 @@ model Stall {
   type                StallType
   status              StallStatus          @default(available)
   monthlyRent         Float
+  createdAt           DateTime             @default(now())
   bookings            Booking[]
   maintenanceRequests MaintenanceRequest[]
   market              Market               @relation(fields: [marketId], references: [id], onDelete: Cascade)

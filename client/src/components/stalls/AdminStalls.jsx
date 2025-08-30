@@ -34,7 +34,9 @@ const AdminStalls = ({
 	};
 
 	const handlePageChange = (newPage) => {
-		if (newPage < 1 || newPage > pagination.totalPages) return;
+		if (newPage < 1 || newPage > pagination.totalPages) {
+			return;
+		}
 		fetchData({ page: newPage, limit: pagination.limit });
 	};
 	return (
