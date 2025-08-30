@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import StallModal from "../modals/StallModal";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useCreateStall from "../../hooks/useCreateStall";
-import { Edit, Trash } from "lucide-react";
+import { ArrowLeft, ArrowLeftIcon, Edit, Trash } from "lucide-react";
 import useUpdateStall from "../../hooks/useUpdateStall";
+import useDelete from "../../hooks/useDelete";
 
 const AdminStalls = ({
 	data,
@@ -13,11 +14,13 @@ const AdminStalls = ({
 }) => {
 	const { pagination } = data || {};
 	const { id } = useParams();
+	const navigate = useNavigate();
 	const [isOpen, setIsOpen] = useState(false);
 	const [mode, setMode] = useState("create"); // 'create' or 'edit'
 	const [selectedStall, setSelectedStall] = useState(null);
 	const { loading: _loadingCreate, _error, createStall } = useCreateStall();
 	const { loading: loadingUpdate, updateStall } = useUpdateStall();
+	const { loading: loadingDeleteStall, deleteResource } = useDelete();
 
 	// console.log("id", id);
 
@@ -30,15 +33,27 @@ const AdminStalls = ({
 			if (result) {
 				setIsOpen(false);
 				setSelectedStall(null);
-				fetchData();
+				await fetchData();
 			}
 		} else if (mode === "edit") {
 			const result = await updateStall(formData, selectedStall.id);
 			if (result) {
 				setIsOpen(false); // close the modal;
-				setSelectedStall(false);
-				fetchData(); // refetch the stalls;
+				setSelectedStall(null);
+				await fetchData(); // refetch the stalls;
 			}
+		}
+	};
+
+	// delete a stall;
+	const handleDelete = async (id) => {
+		if (!window.confirm("Are you sure you want to delete this stall?")) {
+			return;
+		}
+		const result = await deleteResource(`/api/stalls/${id}`);
+		if (result) {
+			setSelectedStall(null);
+			await fetchData();
 		}
 	};
 
@@ -57,11 +72,17 @@ const AdminStalls = ({
 
 			<button
 				type="button"
+				onClick={() => navigate("/markets")}
+				className="self-start ml-0 rounded-full text-[var(--color-text)] hover:opacity-40 transition-all duration-200">
+				<ArrowLeftIcon size={24} />
+			</button>
+
+			<button
+				type="button"
 				onClick={() => setIsOpen(true)}
 				className="self-end flex items-center gap-1 bg-[var(--color-brand-secondary)] hover:bg-[var(--color-brand-primary)] py-1 px-2 rounded-lg text-[var(--color-text-contrast)] transition-all duration-200">
 				Add Stall
 			</button>
-
 			<StallModal
 				initialData={selectedStall}
 				mode={mode}
@@ -112,11 +133,17 @@ const AdminStalls = ({
 											className="text-[var(--color-brand-secondary)] hover:text-[var(--color-brand-primary)]"
 										/>
 									</button>
-									<button disabled={loadingStalls}>
-										<Trash
-											size={20}
-											className="text-red-500 hover:text-red-700"
-										/>
+									<button
+										disabled={loadingDeleteStall}
+										onClick={() => handleDelete(stall.id)}>
+										{loadingDeleteStall ? (
+											<div className="w-4 h-4 border-2 border-red-500 border-dashed rounded-full animate-spin"></div>
+										) : (
+											<Trash
+												size={20}
+												className="text-red-500 hover:text-red-700"
+											/>
+										)}
 									</button>
 								</td>
 							</tr>
