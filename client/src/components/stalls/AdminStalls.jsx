@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import StallModal from "../modals/StallModal";
 import { useNavigate, useParams } from "react-router-dom";
 import useCreateStall from "../../hooks/useCreateStall";
-import { ArrowLeft, ArrowLeftIcon, Edit, Trash } from "lucide-react";
+import { ArrowLeftIcon, Edit, Trash } from "lucide-react";
 import useUpdateStall from "../../hooks/useUpdateStall";
 import useDelete from "../../hooks/useDelete";
 
@@ -21,6 +21,7 @@ const AdminStalls = ({
 	const { loading: _loadingCreate, _error, createStall } = useCreateStall();
 	const { loading: loadingUpdate, updateStall } = useUpdateStall();
 	const { loading: loadingDeleteStall, deleteResource } = useDelete();
+	const [deletingStallId, setDeletingStallId] = useState(null);
 
 	// console.log("id", id);
 
@@ -50,11 +51,13 @@ const AdminStalls = ({
 		if (!window.confirm("Are you sure you want to delete this stall?")) {
 			return;
 		}
+		setDeletingStallId(id);
 		const result = await deleteResource(`/api/stalls/${id}`);
 		if (result) {
 			setSelectedStall(null);
 			await fetchData();
 		}
+		setDeletingStallId(null);
 	};
 
 	const handlePageChange = (newPage) => {
@@ -134,9 +137,11 @@ const AdminStalls = ({
 										/>
 									</button>
 									<button
-										disabled={loadingDeleteStall}
+										disabled={
+											loadingDeleteStall && deletingStallId === stall.id
+										}
 										onClick={() => handleDelete(stall.id)}>
-										{loadingDeleteStall ? (
+										{loadingDeleteStall && deletingStallId === stall.id ? (
 											<div className="w-4 h-4 border-2 border-red-500 border-dashed rounded-full animate-spin"></div>
 										) : (
 											<Trash
