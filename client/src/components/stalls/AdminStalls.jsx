@@ -3,6 +3,7 @@ import StallModal from "../modals/StallModal";
 import { useParams } from "react-router-dom";
 import useCreateStall from "../../hooks/useCreateStall";
 import { Edit, Trash } from "lucide-react";
+import useUpdateStall from "../../hooks/useUpdateStall";
 
 const AdminStalls = ({
 	data,
@@ -13,22 +14,30 @@ const AdminStalls = ({
 	const { pagination } = data || {};
 	const { id } = useParams();
 	const [isOpen, setIsOpen] = useState(false);
-	const [mode, _setMode] = useState("create"); // 'create' or 'edit'
+	const [mode, setMode] = useState("create"); // 'create' or 'edit'
 	const [selectedStall, setSelectedStall] = useState(null);
 	const { loading: _loadingCreate, _error, createStall } = useCreateStall();
+	const { loading: loadingUpdate, updateStall } = useUpdateStall();
 
 	// console.log("id", id);
 
-	// create new stall;
+	// create/update new stall;
 	const handleSubmit = async (formData) => {
 		// const payload = {...formData, id}
 		if (mode === "create") {
 			const result = await createStall(formData, id);
-			console.log("result :", result);
+			// console.log("result :", result);
 			if (result) {
 				setIsOpen(false);
-				setSelectedStall(false);
+				setSelectedStall(null);
 				fetchData();
+			}
+		} else if (mode === "edit") {
+			const result = await updateStall(formData, selectedStall.id);
+			if (result) {
+				setIsOpen(false); // close the modal;
+				setSelectedStall(false);
+				fetchData(); // refetch the stalls;
 			}
 		}
 	};
@@ -91,7 +100,13 @@ const AdminStalls = ({
 									{stall.createdAt?.split("T")[0]}
 								</td>
 								<td className="py-3 px-4 space-x-4">
-									<button disabled={loadingStalls}>
+									<button
+										disabled={loadingUpdate}
+										onClick={() => {
+											setIsOpen(true);
+											setMode("edit");
+											setSelectedStall(stall);
+										}}>
 										<Edit
 											size={20}
 											className="text-[var(--color-brand-secondary)] hover:text-[var(--color-brand-primary)]"
