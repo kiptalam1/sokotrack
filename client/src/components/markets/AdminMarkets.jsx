@@ -41,7 +41,9 @@ const AdminMarkets = ({
 	};
 
 	const handleDelete = async (id) => {
-		if (!window.confirm("Are you sure you want to delete this market?")) return;
+		if (!window.confirm("Are you sure you want to delete this market?")) {
+			return;
+		}
 		const result = await deleteResource(`/api/markets/${id}`);
 		if (result) {
 			await refetch();

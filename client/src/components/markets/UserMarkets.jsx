@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { RefreshCw } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 const UserMarkets = ({ data, error, loading, refetch }) => {
+	const { user } = useAuth();
+
 	const [isRefreshing, setIsRefreshing] = useState(false);
 
 	const handleRefresh = async () => {
-		if (!refetch) return;
+		if (!refetch) {
+			return;
+		}
 		setIsRefreshing(true);
 		try {
 			await refetch();
@@ -38,14 +44,14 @@ const UserMarkets = ({ data, error, loading, refetch }) => {
 						<th className="py-2 px-4 text-left">Market</th>
 						<th className="py-2 px-4 text-left">Location</th>
 						<th className="py-2 px-4 text-left">County</th>
-						{/* <th className="py-2 px-4 text-left hidden sm:table-cell">Date</th> */}
+						<th className="py-2 px-4 text-left">Action</th>
 					</tr>
 				</thead>
 
 				<tbody>
 					{!data?.markets || data.markets.length === 0 ? (
 						<tr>
-							<td colSpan="3" className="text-center py-4">
+							<td colSpan="4" className="text-center py-4">
 								No markets available
 							</td>
 						</tr>
@@ -58,6 +64,11 @@ const UserMarkets = ({ data, error, loading, refetch }) => {
 								{/* <td className="py-2 px-4 hidden sm:table-cell">
 									{market.createdAt.split("T")[0]}
 								</td> */}
+								<Link
+									to={`/markets/${market.id}/stalls/${user?.role}`}
+									className="text-[var(--color-brand-primary)] hover:underline text-sm sm:text-base">
+									View stalls
+								</Link>
 							</tr>
 						))
 					)}
