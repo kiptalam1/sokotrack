@@ -5,6 +5,7 @@ import {
 	getASingleStallDetails,
 	updateStall,
 	deleteAStall,
+	fetchAllStalls,
 } from "../controllers/stall.controllers.js";
 import { updateStallValidators } from "../validators/market.validators.js";
 
@@ -19,6 +20,7 @@ router.patch(
 	updateStall
 );
 router.delete("/:id", verifyAccessToken, deleteAStall);
+router.get("/", verifyAccessToken, fetchAllStalls);
 
 
 export default router;
