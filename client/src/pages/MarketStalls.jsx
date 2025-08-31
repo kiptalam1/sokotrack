@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import useFetch from "../hooks/useFetch";
 import { Navigate, useParams } from "react-router-dom";
 import AdminStalls from "../components/stalls/AdminStalls";
+import UserStalls from "../components/stalls/UserStalls";
 
 const MarketStalls = () => {
 	const { loading: authLoading, user } = useAuth();
@@ -40,6 +41,14 @@ const MarketStalls = () => {
 
 			{user && isAdmin && (
 				<AdminStalls
+					data={stalls}
+					loading={loadingStalls}
+					error={errorFetching}
+					refetch={fetchData}
+				/>
+			)}
+			{user && !isAdmin && (
+				<UserStalls
 					data={stalls}
 					loading={loadingStalls}
 					error={errorFetching}
