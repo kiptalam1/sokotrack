@@ -104,10 +104,18 @@ export const fetchAllStalls = async (req, res) => {
 	if (!isAdmin) {
 		return res.status(403).json({ error: "Access denied. Admins only." });
 	}
-	// else if user is admin then fetch all the stalls;
+	// else if user is admin then fetch all the stalls and its market;
 	const stalls = await prisma.stall.findMany({
 		skip,
 		take: limit,
+		include: {
+			market: {
+				select: {
+					id: true,
+					name: true,
+				},
+			},
+		},
 	});
 
 	const totalStalls = await prisma.stall.count();

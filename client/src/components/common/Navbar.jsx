@@ -118,11 +118,13 @@ const Navbar = () => {
 							Markets
 						</NavLink>
 					</li>
-					<li>
-						<NavLink to="/contact" className={linkClass}>
-							Contact
-						</NavLink>
-					</li>
+					{user && user.role === "admin" && (
+						<li>
+							<NavLink to={`/stalls/${user.role}`} className={linkClass}>
+								Stalls
+							</NavLink>
+						</li>
+					)}
 					{user && (
 						<li>
 							<button

@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Markets from "./pages/Markets";
 import MarketStalls from "./pages/MarketStalls";
+import Stalls from "./pages/Stalls";
 // import Stalls from "./pages/Stalls";
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
 				<Route path="/markets" element={<Markets />} />
 				<Route path="/markets/:id/stalls/:role" element={<MarketStalls />} />
 
-				{/* <Route path="/stalls/:role" element={<Stalls />} /> */}
+				<Route path="/stalls/:role" element={<Stalls />} />
 			</Routes>
 		</>
 	);
