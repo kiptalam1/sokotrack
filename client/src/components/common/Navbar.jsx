@@ -82,6 +82,14 @@ const Navbar = () => {
 
 				{user && (
 					<li>
+						<NavLink to={`/applications/${user.role}`} className={linkClass}>
+							Applications
+						</NavLink>
+					</li>
+				)}
+
+				{user && (
+					<li>
 						<button
 							onClick={logout}
 							className="text-white bg-red-400 hover:bg-red-600 font-semibold px-3 py-1 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-400">
