@@ -6,7 +6,7 @@ const ApplicationModal = ({ isOpen, onSubmit, onCancel }) => {
 		phone: "",
 	});
 	if (!isOpen) {
-		return; // do not render modal if closed;
+		return null; // do not render modal if closed;
 	}
 
 	const handleInputChange = (e) => {
@@ -59,8 +59,8 @@ const ApplicationModal = ({ isOpen, onSubmit, onCancel }) => {
 						placeholder="+254712345678"
 						value={formData.phone}
 						onChange={handleInputChange}
-						pattern="^(\+2547\d{8}|07\d{8})$"
-						title="Enter a valid Kenyan phone number (e.g. +254712345678 or 0712345678)"
+						pattern="^(\+254(7|1)\d{8}|0(7|1)\d{8})$"
+						title="Enter a valid Kenyan phone number (e.g. +254712345678, +254112345678, 0712345678, or 0112345678)"
 						required
 						className="py-2 px-4 text-base w-full border-none outline-none 
               focus:ring-2 focus:ring-[var(--color-brand-accent)] 
