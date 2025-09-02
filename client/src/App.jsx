@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Markets from "./pages/Markets";
 import MarketStalls from "./pages/MarketStalls";
 import Stalls from "./pages/Stalls";
+import Applications from "./pages/Applications";
 // import Stalls from "./pages/Stalls";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
 				<Route path="/markets/:id/stalls/:role" element={<MarketStalls />} />
 
 				<Route path="/stalls/:role" element={<Stalls />} />
+				<Route path="/applications/:role" element={<Applications />} />
 			</Routes>
 		</>
 	);
