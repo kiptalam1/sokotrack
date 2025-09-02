@@ -79,6 +79,7 @@ const UserApplications = () => {
 					<p className="text-gray-500 mt-4">No applications yet.</p>
 				) : (
 					<ul className="w-full max-w-xl mx-auto space-y-3">
+						<h2 className="text-center font-semibold">My Applications</h2>
 						{applications.map((app) => {
 							const date = new Date(app.createdAt).toLocaleDateString("en-KE", {
 								day: "2-digit",

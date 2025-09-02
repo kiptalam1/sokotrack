@@ -133,6 +133,15 @@ const Navbar = () => {
 							</NavLink>
 						</li>
 					)}
+
+					{user && (
+						<li>
+							<NavLink to={`/applications/${user.role}`} className={linkClass}>
+								Applications
+							</NavLink>
+						</li>
+					)}
+
 					{user && (
 						<li>
 							<button
