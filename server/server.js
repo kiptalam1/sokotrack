@@ -8,6 +8,7 @@ dotenv.config();
 import authRoutes from "./routes/auth.routes.js";
 import marketRoutes from "./routes/market.routes.js";
 import stallRoutes from "./routes/stall.routes.js";
+import applicationRoutes from "./routes/application.routes.js";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/markets", marketRoutes);
 app.use("/api/stalls", stallRoutes);
+app.use("/api/applications", applicationRoutes);
 
 
 // 404 handler
