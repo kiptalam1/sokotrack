@@ -16,17 +16,29 @@ model User {
   createdAt DateTime @default(now())
   trader    Trader?
   applications Application[]
+  countyId String? 
+  county County? @relation(fields: [countyId], references: [id])
+}
+
+model County {
+  id String @id @default(uuid())
+  name String @unique
+  markets Market[]
+  officers User[]
+  createdAt DateTime @default(now())
+
 }
 
 model Market {
   id        String   @id @default(uuid())
   name      String
   location  String?
-  county    String
+  countyId  String
+  county    County   @relation(fields: [countyId], references: [id])
   createdAt DateTime @default(now())
   stalls    Stall[]
 
-  @@unique([name, county])
+  @@unique([name, countyId])
 }
 
 model Stall {

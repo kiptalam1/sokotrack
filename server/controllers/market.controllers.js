@@ -45,7 +45,15 @@ export const createMarket = async (req, res) => {
 
 export const getAllMarkets = async (req, res) => {
 	try {
-		const markets = await prisma.market.findMany();
+		const markets = await prisma.market.findMany({
+			include: {
+				county: {
+					select: {
+						name: true,
+					},
+				},
+			},
+		});
 
 		return res.status(200).json({ markets });
 	} catch (error) {

@@ -60,7 +60,9 @@ const UserMarkets = ({ data, error, loading, refetch }) => {
 							<tr key={market.id} className="">
 								<td className="py-2 px-4">{market.name}</td>
 								<td className="py-2 px-4">{market.location}</td>
-								<td className="py-2 px-4">{market.county}</td>
+								<td className="py-2 px-4">
+									{market.county?.name || "No County"}
+								</td>
 								{/* <td className="py-2 px-4 hidden sm:table-cell">
 									{market.createdAt.split("T")[0]}
 								</td> */}
