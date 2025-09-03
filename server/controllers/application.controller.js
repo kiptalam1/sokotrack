@@ -135,7 +135,7 @@ export const updateApplicationStatus = async (req, res) => {
 		}
 
 		// approve or reject application;
-		const updateApplicationStatus = await prisma.application.update({
+		const updatedApplication = await prisma.application.update({
 			where: {
 				id: appId,
 				status: {
@@ -143,12 +143,12 @@ export const updateApplicationStatus = async (req, res) => {
 				},
 			},
 			data: {
-				status
-			}
+				status,
+			},
 		});
 		return res.status(200).json({
 			message: "Application status updated successfully",
-			application: updateApplicationStatus
+			application: updatedApplication,
 		});
 	} catch (error) {
 		console.error(error.message);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
-import useUpdateApplications from "../../hooks/useUpdateApplications";
+import useUpdateResource from "../../hooks/useUpdateResource";
 // import { useParams } from "react-router-dom";
 
 const AdminApplications = () => {
@@ -20,7 +20,7 @@ const AdminApplications = () => {
 		loading: isUpdating,
 		error: _isUpdateError,
 		updateResource,
-	} = useUpdateApplications(`/api/applications/update-status`);
+	} = useUpdateResource(`/api/applications/update-status`);
 
 	const applications = data?.applications || [];
 
@@ -39,7 +39,7 @@ const AdminApplications = () => {
 	}, [fetchData]);
 
 	const handleAction = async (id, status) => {
-		setActionLoading(id);
+		setActionLoading(`${status}-${id}`);
 		try {
 			const result = await updateResource(id, { status });
 			if (result) {
@@ -126,10 +126,14 @@ const AdminApplications = () => {
 											<td className="py-2 px-4">
 												<div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
 													<button
-														disabled={isUpdating || app.status === "approved"}
+														disabled={
+															actionLoading === `approved-${app.id}` ||
+															app.status === "approved"
+														}
 														onClick={() => handleAction(app.id, "approved")}
 														className="px-2 py-1 bg-green-600 text-white rounded text-sm disabled:opacity-50 flex items-center justify-center min-w-[70px]">
-														{actionLoading === app.id && isUpdating ? (
+														{actionLoading === `approved-${app.id}` &&
+														isUpdating ? (
 															<div className="animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4"></div>
 														) : (
 															"Approve"
@@ -137,10 +141,14 @@ const AdminApplications = () => {
 													</button>
 
 													<button
-														disabled={isUpdating || app.status === "rejected"}
+														disabled={
+															actionLoading === `rejected-${app.id}` ||
+															app.status === "rejected"
+														}
 														onClick={() => handleAction(app.id, "rejected")}
 														className="px-2 py-1 bg-red-500 text-white rounded text-sm disabled:opacity-50 flex items-center justify-center min-w-[70px]">
-														{actionLoading === app.id && isUpdating ? (
+														{actionLoading === `rejected-${app.id}` &&
+														isUpdating ? (
 															<div className="animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4"></div>
 														) : (
 															"Reject"
