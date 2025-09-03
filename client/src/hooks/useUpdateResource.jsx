@@ -2,7 +2,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useApi } from "./apiClient";
 
-const useUpdateApplications = (url) => {
+const useUpdateResource = (url) => {
 	const { apiFetch } = useApi();
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
@@ -24,9 +24,9 @@ const useUpdateApplications = (url) => {
 			const result = await res.json();
 
 			if (!res.ok) {
-				throw new Error(result?.error);
+				throw new Error(result?.error || "Update failed");
 			}
-			toast.success(result.message);
+			toast.success(result.message || "Update Successful");
 
 			return result;
 		} catch (error) {
@@ -45,4 +45,4 @@ const useUpdateApplications = (url) => {
 	};
 };
 
-export default useUpdateApplications;
+export default useUpdateResource;
