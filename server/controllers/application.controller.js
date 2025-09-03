@@ -66,3 +66,34 @@ export const getMyApplications = async (req, res) => {
 		});
 	}
 };
+
+export const getAllApplications = async (req, res) => {
+	const { userId } = req.user;
+	// if user is admin, they can view all the applications.
+	try {
+		const isAdmin = await prisma.user.findUnique({
+			where: {
+				id: userId,
+				role: "admin",
+			},
+		});
+		if (!isAdmin) {
+			return res.status(403).json({ error: "Access denied" });
+		}
+		const applications = await prisma.application.findMany({
+			include: {
+				user: {
+					select: {
+						id: true,
+						name: true,
+						county: true,
+					},
+				},
+			},
+		});
+		return res.status(200).json({ applications });
+	} catch (error) {
+		console.error("Error fetching applications:", error);
+		return res.status(500).json({ error: "Internal server error" });
+	}
+};
