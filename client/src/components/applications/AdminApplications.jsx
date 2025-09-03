@@ -1,18 +1,26 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
+import useUpdateApplications from "../../hooks/useUpdateApplications";
+// import { useParams } from "react-router-dom";
 
-// AdminApplications is UI-only: it renders a responsive table and delegates
-// approve/reject logic to an optional `onAction(id, status)` prop.
-const AdminApplications = ({ onAction } = {}) => {
+const AdminApplications = () => {
 	const [loading, setLoading] = useState(false);
 	const [actionLoading, setActionLoading] = useState(null);
+	// const { id } = useParams();
 
 	const {
 		data,
 		loading: loadingApplications,
-		_error,
+		error: isFetchingError,
 		refetch: fetchData,
 	} = useFetch("/api/applications/all-applications");
+
+	// update application status;
+	const {
+		loading: isUpdating,
+		error: _isUpdateError,
+		updateResource,
+	} = useUpdateApplications(`/api/applications/update-status`);
 
 	const applications = data?.applications || [];
 
@@ -31,21 +39,16 @@ const AdminApplications = ({ onAction } = {}) => {
 	}, [fetchData]);
 
 	const handleAction = async (id, status) => {
-		setActionLoading(`${status}-${id}`);
+		setActionLoading(id);
 		try {
-			if (typeof onAction === "function") {
-				await onAction(id, status);
+			const result = await updateResource(id, { status });
+			if (result) {
+				await fetchData();
 			}
 		} catch (err) {
-			// caller handles errors if they want to
 			console.error(err);
 		} finally {
 			setActionLoading(null);
-			try {
-				await fetchData();
-			} catch {
-				/* ignore */
-			}
 		}
 	};
 
@@ -60,7 +63,7 @@ const AdminApplications = ({ onAction } = {}) => {
 			<div className="w-full">
 				<h2 className="text-center font-semibold mb-2">All Applications</h2>
 
-				{_error && (
+				{isFetchingError && (
 					<p className="text-red-500 mt-2">Failed to load applications.</p>
 				)}
 
@@ -123,26 +126,25 @@ const AdminApplications = ({ onAction } = {}) => {
 											<td className="py-2 px-4">
 												<div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
 													<button
-														disabled={
-															actionLoading === `approve-${app.id}` ||
-															app.status !== "pending"
-														}
+														disabled={isUpdating || app.status === "approved"}
 														onClick={() => handleAction(app.id, "approved")}
-														className="px-2 py-1 bg-green-600 text-white rounded text-sm disabled:opacity-50">
-														{actionLoading === `approve-${app.id}`
-															? "..."
-															: "Approve"}
+														className="px-2 py-1 bg-green-600 text-white rounded text-sm disabled:opacity-50 flex items-center justify-center min-w-[70px]">
+														{actionLoading === app.id && isUpdating ? (
+															<div className="animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4"></div>
+														) : (
+															"Approve"
+														)}
 													</button>
+
 													<button
-														disabled={
-															actionLoading === `reject-${app.id}` ||
-															app.status !== "pending"
-														}
+														disabled={isUpdating || app.status === "rejected"}
 														onClick={() => handleAction(app.id, "rejected")}
-														className="px-2 py-1 bg-red-500 text-white rounded text-sm disabled:opacity-50">
-														{actionLoading === `reject-${app.id}`
-															? "..."
-															: "Reject"}
+														className="px-2 py-1 bg-red-500 text-white rounded text-sm disabled:opacity-50 flex items-center justify-center min-w-[70px]">
+														{actionLoading === app.id && isUpdating ? (
+															<div className="animate-spin border-2 border-white border-t-transparent rounded-full w-4 h-4"></div>
+														) : (
+															"Reject"
+														)}
 													</button>
 												</div>
 											</td>

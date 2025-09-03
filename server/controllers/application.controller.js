@@ -97,3 +97,61 @@ export const getAllApplications = async (req, res) => {
 		return res.status(500).json({ error: "Internal server error" });
 	}
 };
+
+// approve or reject an application;
+export const updateApplicationStatus = async (req, res) => {
+	const { id: appId } = req.params;
+	const { status } = req.body;
+	const { userId } = req.user;
+
+	try {
+		// check if user is admin/official;
+		const isAllowed = await prisma.user.findUnique({
+			where: {
+				id: userId,
+				role: {
+					in: ["admin", "officer"]
+				},
+			}
+		});
+		if (!isAllowed) {
+			return res.status(403).json({ error: "Access denied" });
+		}
+
+
+		// check the application status;
+		const application = await prisma.application.findUnique({
+			where: {
+				id: appId,
+			}
+		});
+		if (!application) {
+			return res.status(404).json({ error: "Application not found" });
+		}
+
+		// sanitize status;
+		if (status && !["approved", "rejected"].includes(status)) {
+			return res.status(400).json({ error: "Invalid status" });
+		}
+
+		// approve or reject application;
+		const updateApplicationStatus = await prisma.application.update({
+			where: {
+				id: appId,
+				status: {
+					in: ["pending", "approved", "rejected"],
+				},
+			},
+			data: {
+				status
+			}
+		});
+		return res.status(200).json({
+			message: "Application status updated successfully",
+			application: updateApplicationStatus
+		});
+	} catch (error) {
+		console.error(error.message);
+		return res.status(500).json({ error: "Internal server error" });
+	}
+}
